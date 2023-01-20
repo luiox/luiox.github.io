@@ -1,7 +1,7 @@
 # Setup
-title: Not Pure Poole
-description: A simple, beautiful, and powerful Jekyll theme for blogs
-url: https://vszhub.github.io
+title: Luiox
+description: Luiox's personal home page
+url: https://luiox.github.io
 avatar: /avatar.jpeg
 paginate: 5
 permalink: pretty
@@ -55,5 +55,5 @@ sass:
 # Specify the author for blog posts
 author:
   name: Songzi Vong
-  url: https://github.com/vszhub/
-  email: vszhub@gmail.com
+  url: https://github.com/luiox/
+  email: 
