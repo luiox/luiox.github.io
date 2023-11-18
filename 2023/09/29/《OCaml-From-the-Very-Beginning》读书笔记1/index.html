@@ -1,0 +1,515 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>《OCaml From the Very Beginning》读书笔记1 | Canrad&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Canrad">
+    
+
+    
+    <meta name="description" content="前言《OCaml From the Very Beginning》这本书间我歇着看了好久了，但是始终没有看完，这次趁着放假把这本书看完，顺便写点笔记，以免跟之前一样，看完以后过一段时间就忘了。 在记录书本内容之前，先写点我坎坷的OCaml学习之路。一开始我尝试过在Windows上配置OCaml的环境，然后怎么也搞不好环境，就放弃了一次。然后八九月的时候好不容易把WSL2搞好了，就重新开始学OCam">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《OCaml From the Very Beginning》读书笔记1">
+<meta property="og:url" content="https://luiox.github.io/2023/09/29/%E3%80%8AOCaml-From-the-Very-Beginning%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B01/index.html">
+<meta property="og:site_name" content="Canrad&#39;s Blog">
+<meta property="og:description" content="前言《OCaml From the Very Beginning》这本书间我歇着看了好久了，但是始终没有看完，这次趁着放假把这本书看完，顺便写点笔记，以免跟之前一样，看完以后过一段时间就忘了。 在记录书本内容之前，先写点我坎坷的OCaml学习之路。一开始我尝试过在Windows上配置OCaml的环境，然后怎么也搞不好环境，就放弃了一次。然后八九月的时候好不容易把WSL2搞好了，就重新开始学OCam">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-09-29T13:06:29.000Z">
+<meta property="article:modified_time" content="2023-11-18T14:21:38.251Z">
+<meta property="article:author" content="Canrad">
+<meta property="article:tag" content="OCaml">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Canrad&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Canrad&#39;s Blog">Canrad&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:luiox.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2023/09/29/《OCaml-From-the-Very-Beginning》读书笔记1/" title="《OCaml From the Very Beginning》读书笔记1" itemprop="url">《OCaml From the Very Beginning》读书笔记1</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Canrad" target="_blank" itemprop="author">Canrad</a>
+		
+  <p class="article-time">
+    <time datetime="2023-09-29T13:06:29.000Z" itemprop="datePublished"> Published 2023-09-29</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%92%8C%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">表达式计算和类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#let%E7%BB%91%E5%AE%9A%E5%92%8C%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0"><span class="toc-number">3.</span> <span class="toc-text">let绑定和递归函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="toc-number">4.</span> <span class="toc-text">模式匹配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#List%E5%88%97%E8%A1%A8"><span class="toc-number">5.</span> <span class="toc-text">List列表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F"><span class="toc-number">6.</span> <span class="toc-text">排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%8A%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD%E5%88%B0%E8%A7%A3%E9%87%8A%E5%99%A8"><span class="toc-number">7.</span> <span class="toc-text">把文件中的代码加载到解释器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0"><span class="toc-number">8.</span> <span class="toc-text">高阶函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="toc-number">9.</span> <span class="toc-text">错误处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E5%85%B8"><span class="toc-number">10.</span> <span class="toc-text">字典</span></a></li></ol>
+		
+		</div>
+		
+		<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>《OCaml From the Very Beginning》这本书间我歇着看了好久了，但是始终没有看完，这次趁着放假把这本书看完，顺便写点笔记，以免跟之前一样，看完以后过一段时间就忘了。</p>
+<p>在记录书本内容之前，先写点我坎坷的OCaml学习之路。一开始我尝试过在Windows上配置OCaml的环境，然后怎么也搞不好环境，就放弃了一次。然后八九月的时候好不容易把WSL2搞好了，就重新开始学OCaml了。对于OCaml解释器，一开始我不懂的时候，直接就是在那个OCaml原本的解释器上写，那个东西输进去就不能删除，体验很糟糕。因为不知道OCaml有uTop这种REPL的存在，后来看了一个配置环境教程，链接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/550727182">https://zhuanlan.zhihu.com/p/550727182</a>，算是摸到了一点门道。但是因为九月很忙一直没有空看《OCaml From the Very Beginning》这本书，只能依靠我之前看这本书的一丝丝记忆来写OCaml，反正就是写什么都报错。一想到就<code>;</code>和<code>;;</code>这两个分不清导致的问题，我一直搜和问ChatGTP解决了很久很久还没有解决，最后还是问别人解决的。</p>
+<p>OCaml给我的一个感觉就是中文的资料数量少，质量不行，只有入门级别，有些甚至入门都算不上。稍微好一点的资料全是英文的，奈何我英语不太好😅😅😅。但是也没有办法，既然选择要学，就只能硬着头皮看《OCaml From the Very Beginning》,好在仅仅只是单词个别看不懂，有翻译的加持，大致能理解。这一篇就总结一下前面8个Chapter的内容。</p>
+<h1 id="表达式计算和类型"><a href="#表达式计算和类型" class="headerlink" title="表达式计算和类型"></a>表达式计算和类型</h1><p>这本书一开始从<code>1+2*3</code>表达式计算开始讲起，表达式的计算是有优先级的，先计算乘除再计算加减。使用<code>()</code>小括号括住，让一个表达式能够先被计算。运算符主要是有<code>+</code>、<code>-</code>、<code>*</code>、<code>/</code>和<code>mod</code>（取余）。类型有<code>int</code>、<code>double</code>、<code>double</code>、<code>bool</code>和<code>string</code>。</p>
+<p>OCaml对表达式中有类型的要求，比如<code>1+true</code>就不行，因为前者是<code>int</code>后者是<code>bool</code>。OCaml中类型是很重要的东西，如果类型不匹配就不能通过编译。</p>
+<h1 id="let绑定和递归函数"><a href="#let绑定和递归函数" class="headerlink" title="let绑定和递归函数"></a>let绑定和递归函数</h1><p>let可以用于把一个值绑定到一个标识符上，也可以把一个函数绑定上去。</p>
+<p>函数是一种类型到一种类型。比如下面的<code>neg</code>就是<code>int -&gt; bool = &lt;fun&gt;</code>因为是一个函数，所以会有<code>=&lt;fun&gt;</code>。</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> neg x = <span class="keyword">if</span> x &lt; <span class="number">0</span> <span class="keyword">then</span> <span class="literal">true</span> <span class="keyword">else</span> <span class="literal">false</span>;;</span><br></pre></td></tr></table></figure>
+
+<p>之前我是不知道递归函数是<code>recursive function  </code>，因为我认不到<code>recursive</code>这个词，只知道<code>function</code>是函数，然后<code>let</code>的时候加一个<code>rec</code>就可以表明是递归的，现在算是理解了。</p>
+<p>OCaml中let定义函数，差不多格式是<code>let 函数名 参数1 参数2 ... = 函数体</code>。差不多是这么一个意思，如果是递归就把<code>let</code>改为<code>let rec</code>。</p>
+<h1 id="模式匹配"><a href="#模式匹配" class="headerlink" title="模式匹配"></a>模式匹配</h1><p>模式匹配是真的搞人心态，功能很强大，但是也很难掌握。格式差不多如下。这里是对<code>a</code>进行模式匹配，然后前面都不能匹配的时候，才匹配<code>_</code>情况。</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">match</span> a <span class="keyword">with</span></span><br><span class="line">| case1 -&gt; <span class="number">1</span></span><br><span class="line">| case2 -&gt; <span class="number">2</span></span><br><span class="line">| _ -&gt;<span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p>单纯的模式匹配作用不大，都是配合其他使用。</p>
+<h1 id="List列表"><a href="#List列表" class="headerlink" title="List列表"></a>List列表</h1><p>我之前搞不清楚以为OCaml的List是用<code>,</code>分割元素的。实际上一个列表式类似于<code>[1;2;3]</code>这样的，列表之间用<code>@</code>连接，比如<code>[1;2;3] @ [4;5]</code>。这个<code>@</code>理解为append。</p>
+<p>OCaml中的列表分为两个部分，一个是头一个是尾。任何一个非空的列表分为头和尾，如果是空的列表，那就叫nil。所谓的头和尾，比如<code>[1;2;3]</code>中，如果<code>[1]</code>是头，<code>[2;3]</code>就是尾，而如果<code>[3]</code>是头，那<code>[]</code>就是尾，这个尾就是空列表。</p>
+<p>因此可以配合前面的模式匹配来进行列表操作。下面这个<code>length</code>函数，传入一个列表，然后模式匹配，空列表的时候返回0，非空就拆解尾头和尾，h是头（head），t是尾（tail）。然后递归加1。</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> length l = </span><br><span class="line">  <span class="keyword">match</span> l <span class="keyword">with</span></span><br><span class="line">  | <span class="literal">[]</span> -&gt; <span class="number">0</span></span><br><span class="line">  | h::t -&gt; <span class="number">1</span> + length t</span><br></pre></td></tr></table></figure>
+
+
+
+<p>我今天看的时候，对一个例子一开始不太明白，配合ChatGPT的指导，也算是明白了，就是下面这个函数。</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> odd_elements l =</span><br><span class="line">  <span class="keyword">match</span> l <span class="keyword">with</span></span><br><span class="line">  | <span class="literal">[]</span> -&gt; <span class="literal">[]</span></span><br><span class="line">  | [a] -&gt; [a]</span><br><span class="line">  | a::_::t -&gt; a :: odd_elements t</span><br></pre></td></tr></table></figure>
+
+<p>这个函数类型是<code>list -&gt; list</code>，传入一个list以后，对于0个元素的空列表直接返回，一个元素也是。两个及以上的元素，拆分成三个部分。我之前不懂是因为没有想到，两个元素后面还可以有一个<code>[]</code>当第三个元素。这里是把<code>l</code>拆成三分，头、尾然后尾后面的一个，前面的作用是把头尾分出来以后只要头，然后尾不要，但是要递归调用尾后面的一个。这样就完成了挑选出列表中的奇数位上的元素。</p>
+<h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><p>排序一开始讲了插入排序，一个列表如果只有零个或者一个元素的时候是肯定有序的，然后逐个插入到自己正确的位置，这就实现了插入排序。</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> insert x l =</span><br><span class="line">  <span class="keyword">match</span> <span class="number">1</span> <span class="keyword">with</span></span><br><span class="line">  | <span class="literal">[]</span> -&gt; [x]</span><br><span class="line">  | h::t -&gt; </span><br><span class="line">      <span class="keyword">if</span> x &lt;= h</span><br><span class="line">         <span class="keyword">then</span> x :: h :: t</span><br><span class="line">         <span class="keyword">else</span> h :: insert x t</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="keyword">rec</span> sort l =</span><br><span class="line">  <span class="keyword">match</span> l <span class="keyword">with</span></span><br><span class="line">  | <span class="literal">[]</span> -&gt; <span class="literal">[]</span></span><br><span class="line">  | h::t -&gt; insert h (sort t)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>然后是归并排序，主要是take和drop。</p>
+<h1 id="把文件中的代码加载到解释器"><a href="#把文件中的代码加载到解释器" class="headerlink" title="把文件中的代码加载到解释器"></a>把文件中的代码加载到解释器</h1><p>实现从文件加载程序很简单，只需要输入<code>#use &quot;路径&quot;</code>，路径比如<code>main.ml</code>。要知道OCaml的源文件是<code>*.ml</code>，这个指令不属于代码，仅仅只是让解释器加载文件中的代码而已。</p>
+<h1 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h1><p>这一章标题为<code>Functions upon Functions upon Functions</code>，因为它这个把函数作为参数传进去，所以我就叫它高阶函数，也不知道对不对。</p>
+<p>传入的函数就跟普通的函数一样调用就行，<code>函数名 参数</code>就这样，非常简单。有时候可以通过<code>()</code>来创建一个临时的函数。比如<code>(x &gt;= y) 4 5</code>等价于下面这样。</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> greater x y = x &gt;= y</span><br><span class="line">greater <span class="number">4</span> <span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<p>然后就是使用<code>fun</code>定义匿名函数（anonymous function），也就是lambda，这一般用在暂时定义函数然后使用的情况。</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> evens l =</span><br><span class="line">  map (<span class="keyword">fun</span> x -&gt; x <span class="keyword">mod</span> <span class="number">2</span> = <span class="number">0</span>) l</span><br></pre></td></tr></table></figure>
+
+<p>map是一个高阶函数，第一个参数是一个函数，第二个参数是一个列表。也就是对一个列表每个元素进行第一个参数中函数的操作，简而言之就是把传入的函数施加于每一个列表元素。</p>
+<h1 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h1><p>错误处理关键在于使用<code>excetion</code>定义一个异常，然后通过<code>raise</code>发出，通过<code>try with</code>捕获。</p>
+<p>下面是两个定义异常的例子，异常可以是用<code>of</code>指定类型，也可以不说明类型。</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">exception</span> <span class="type">Problem</span></span><br><span class="line"><span class="keyword">exception</span> <span class="type">NotPrime</span> <span class="keyword">of</span> <span class="built_in">int</span></span><br></pre></td></tr></table></figure>
+
+<p>使用<code>raise</code>发出异常的时候可以附带一些信息，信息的类型由定义异常的时候决定。</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">raise (<span class="type">NotPrime</span> <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p><code>try with</code>要注意的是<code>try</code>的类型和<code>with</code>一致。<code>with</code>后面是异常，然后箭头。</p>
+<figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> x/y <span class="keyword">with</span> <span class="type">Division_by_zero</span> -&gt; <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h1><p>字典（dictionary）类型也是很重要的一种类型，是一种Key-&gt;Value的结构，从一种类型映射到另一种类型。使用<code>,</code>来表示，比如一个<code>int</code>到<code>char</code>的字典可以是<code>[1, &#39;1&#39;]</code>。</p>
+<p>在模式匹配中，使用<code>()</code>加上<code>,</code>指明这是一个字典，然后使用<code>_</code>作为通配符。</p>
+<p>至此，前八章内容大致总结完毕。Cheers！🥰🥰🥰</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/OCaml/">OCaml</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://luiox.github.io/2023/09/29/%E3%80%8AOCaml-From-the-Very-Beginning%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B01/" data-title="《OCaml From the Very Beginning》读书笔记1 | Canrad&#39;s Blog" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2023/10/01/【FreeRTOS】任务的使用/" title="【FreeRTOS】任务的使用">
+  <strong>上一篇：</strong><br/>
+  <span>
+  【FreeRTOS】任务的使用</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2023/09/26/记录重新制作博客过程/"  title="记录重新制作博客过程">
+ <strong>下一篇：</strong><br/> 
+ <span>记录重新制作博客过程
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%92%8C%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">表达式计算和类型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#let%E7%BB%91%E5%AE%9A%E5%92%8C%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0"><span class="toc-number">3.</span> <span class="toc-text">let绑定和递归函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="toc-number">4.</span> <span class="toc-text">模式匹配</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#List%E5%88%97%E8%A1%A8"><span class="toc-number">5.</span> <span class="toc-text">List列表</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F"><span class="toc-number">6.</span> <span class="toc-text">排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%8A%E6%96%87%E4%BB%B6%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD%E5%88%B0%E8%A7%A3%E9%87%8A%E5%99%A8"><span class="toc-number">7.</span> <span class="toc-text">把文件中的代码加载到解释器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0"><span class="toc-number">8.</span> <span class="toc-text">高阶函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="toc-number">9.</span> <span class="toc-text">错误处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E5%85%B8"><span class="toc-number">10.</span> <span class="toc-text">字典</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/FreeRTOS/" title="FreeRTOS">FreeRTOS<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Daily/" title="Daily">Daily<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OCaml/" title="OCaml">OCaml<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> This is Canrad&#39;s home page. <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2023 
+		
+		<a href="/about" target="_blank" title="Canrad">Canrad</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
