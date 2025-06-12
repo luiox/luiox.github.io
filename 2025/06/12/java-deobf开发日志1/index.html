@@ -12,15 +12,15 @@
     
 
     
-    <meta name="description" content="说明：这篇文章仅仅是记录deobf的transformer的开发，或者算是一个小教程。代码存储在https:&#x2F;&#x2F;github.com&#x2F;luiox&#x2F;jvm-things-archieve&#x2F;tree&#x2F;main&#x2F;morpher-plugin 为了方便，以及减少相同代码的反复编写，我已经开发了一些基础工具。地址是https:&#x2F;&#x2F;github.com&#x2F;luiox&#x2F;morpher-api。 引入库首先需要加j">
+    <meta name="description" content="说明：这篇文章仅仅是记录deobf的transformer的开发，或者算是一个小教程。代码存储在https:&#x2F;&#x2F;github.com&#x2F;luiox&#x2F;jvm-things-archieve&#x2F;blob&#x2F;main&#x2F;morpher-plugin&#x2F;src&#x2F;main&#x2F;java&#x2F;com&#x2F;github&#x2F;luiox&#x2F;gruntdeobf&#x2F;Sample001Pass1.java 为了方便，以及减少相同代码的反复编写，我">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java deobf开发日志1">
 <meta property="og:url" content="https://luiox.github.io/2025/06/12/java-deobf%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%971/index.html">
 <meta property="og:site_name" content="Canrad&#39;s Blog">
-<meta property="og:description" content="说明：这篇文章仅仅是记录deobf的transformer的开发，或者算是一个小教程。代码存储在https:&#x2F;&#x2F;github.com&#x2F;luiox&#x2F;jvm-things-archieve&#x2F;tree&#x2F;main&#x2F;morpher-plugin 为了方便，以及减少相同代码的反复编写，我已经开发了一些基础工具。地址是https:&#x2F;&#x2F;github.com&#x2F;luiox&#x2F;morpher-api。 引入库首先需要加j">
+<meta property="og:description" content="说明：这篇文章仅仅是记录deobf的transformer的开发，或者算是一个小教程。代码存储在https:&#x2F;&#x2F;github.com&#x2F;luiox&#x2F;jvm-things-archieve&#x2F;blob&#x2F;main&#x2F;morpher-plugin&#x2F;src&#x2F;main&#x2F;java&#x2F;com&#x2F;github&#x2F;luiox&#x2F;gruntdeobf&#x2F;Sample001Pass1.java 为了方便，以及减少相同代码的反复编写，我">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-06-12T12:36:50.000Z">
-<meta property="article:modified_time" content="2025-06-12T13:10:19.044Z">
+<meta property="article:modified_time" content="2025-06-12T14:30:53.828Z">
 <meta property="article:author" content="Canrad">
 <meta name="twitter:card" content="summary">
 
@@ -102,13 +102,13 @@
 		
 		</div>
 		
-		<p>说明：这篇文章仅仅是记录deobf的transformer的开发，或者算是一个小教程。代码存储在<a target="_blank" rel="noopener" href="https://github.com/luiox/jvm-things-archieve/tree/main/morpher-plugin">https://github.com/luiox/jvm-things-archieve/tree/main/morpher-plugin</a></p>
+		<p>说明：这篇文章仅仅是记录deobf的transformer的开发，或者算是一个小教程。代码存储在<a target="_blank" rel="noopener" href="https://github.com/luiox/jvm-things-archieve/blob/main/morpher-plugin/src/main/java/com/github/luiox/gruntdeobf/Sample001Pass1.java">https://github.com/luiox/jvm-things-archieve/blob/main/morpher-plugin/src/main/java/com/github/luiox/gruntdeobf/Sample001Pass1.java</a></p>
 <p>为了方便，以及减少相同代码的反复编写，我已经开发了一些基础工具。地址是<a target="_blank" rel="noopener" href="https://github.com/luiox/morpher-api">https://github.com/luiox/morpher-api</a>。</p>
 <h2 id="引入库"><a href="#引入库" class="headerlink" title="引入库"></a>引入库</h2><p>首先需要加jitpack，因为包在jitpack存储。</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">repositories &#123;</span><br><span class="line">    maven &#123; url = uri(<span class="string">&quot;https://jitpack.io&quot;</span>)  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>其次，引入依赖，前面是依赖的库。</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    implementation(<span class="string">&quot;org.ow2.asm:asm:9.8&quot;</span>)</span><br><span class="line">    implementation(<span class="string">&quot;org.ow2.asm:asm-tree:9.8&quot;</span>)</span><br><span class="line">    implementation(<span class="string">&quot;org.ow2.asm:asm-commons:9.8&quot;</span>)</span><br><span class="line">    implementation(<span class="string">&quot;org.ow2.asm:asm-analysis:9.8&quot;</span>)</span><br><span class="line">    implementation(<span class="string">&quot;org.ow2.asm:asm-util:9.8&quot;</span>)</span><br><span class="line">    implementation(<span class="string">&quot;ch.qos.logback:logback-classic:1.5.18&quot;</span>)</span><br><span class="line">    implementation(<span class="string">&quot;ch.qos.logback:logback-core:1.5.18&quot;</span>)</span><br><span class="line">    implementation(<span class="string">&quot;org.jetbrains:annotations:23.0.0&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    implementation(<span class="string">&quot;com.github.luiox:morpher-api:v1.1&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    implementation(<span class="string">&quot;com.github.luiox:morpher-api:v1.1&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
