@@ -20,7 +20,7 @@
 <meta property="og:description" content="说明：这篇文章仅仅是记录deobf的transformer的开发，或者算是一个小教程。代码存储在https:&#x2F;&#x2F;github.com&#x2F;luiox&#x2F;jvm-things-archieve&#x2F;blob&#x2F;main&#x2F;morpher-plugin&#x2F;src&#x2F;main&#x2F;java&#x2F;com&#x2F;github&#x2F;luiox&#x2F;gruntdeobf&#x2F;Sample001Pass1.java 为了方便，以及减少相同代码的反复编写，我">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2025-06-12T12:36:50.000Z">
-<meta property="article:modified_time" content="2025-06-12T14:35:27.160Z">
+<meta property="article:modified_time" content="2025-06-14T13:14:34.255Z">
 <meta property="article:author" content="Canrad">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -111,8 +111,7 @@
 <p>其次，引入依赖，前面是依赖的库。</p>
 <figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    implementation(<span class="string">&quot;com.github.luiox:morpher-api:v1.2&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
+<p>注意库的版本，尽可能使用最新版本。</p>
 <h2 id="样本来源说明"><a href="#样本来源说明" class="headerlink" title="样本来源说明"></a>样本来源说明</h2><p>不针对任何人，此样本来自Discord的频道<a target="_blank" rel="noopener" href="https://discord.gg/tRU27KtPAZ">https://discord.gg/tRU27KtPAZ</a>分享，在<a target="_blank" rel="noopener" href="https://github.com/luiox/jvm-things-archieve">https://github.com/luiox/jvm-things-archieve</a>仓库的sample目录下，名字是<code>sample-001.jar</code>，原本名字为<code>nCrypt-Resolve.jar</code>。</p>
 <p>这个混淆比较弱，非常适合入门。</p>
 <h2 id="分析到构建pass"><a href="#分析到构建pass" class="headerlink" title="分析到构建pass"></a>分析到构建pass</h2><p>首先进行样本分析，我们利用Recaf得到cfr反编译观察到下面这个结构。</p>
@@ -174,6 +173,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2025/06/14/java-deobf开发日志2/" title="java deobf开发日志2">
+  <strong>上一篇：</strong><br/>
+  <span>
+  java deobf开发日志2</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2025/04/23/二零二五年四月二十三日/"  title="二零二五年四月二十三日">
@@ -261,11 +268,11 @@
 			
 		
 			
-				<li><a href="/tags/FreeRTOS/" title="FreeRTOS">FreeRTOS<sup>3</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>3</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>2</sup></a></li>
+				<li><a href="/tags/FreeRTOS/" title="FreeRTOS">FreeRTOS<sup>3</sup></a></li>
 			
 		
 			

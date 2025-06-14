@@ -1,0 +1,534 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>java deobf开发日志2 | Canrad&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Canrad">
+    
+
+    
+    <meta name="description" content="上一篇已经处理到下面这个情况了。 123if (false) &#123;    int cfr_ignored_0 &#x3D; 17 + 19;&#125;  对应的字节码如下。 123456789    iconst_0     ifeq B    nop     nop     bipush 17    bipush 19    iadd     pop B:   因为ifeq的含义是为0的时候跳转">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java deobf开发日志2">
+<meta property="og:url" content="https://luiox.github.io/2025/06/14/java-deobf%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%972/index.html">
+<meta property="og:site_name" content="Canrad&#39;s Blog">
+<meta property="og:description" content="上一篇已经处理到下面这个情况了。 123if (false) &#123;    int cfr_ignored_0 &#x3D; 17 + 19;&#125;  对应的字节码如下。 123456789    iconst_0     ifeq B    nop     nop     bipush 17    bipush 19    iadd     pop B:   因为ifeq的含义是为0的时候跳转">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-06-14T12:28:03.000Z">
+<meta property="article:modified_time" content="2025-06-14T13:13:22.328Z">
+<meta property="article:author" content="Canrad">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Canrad&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+ <!-- 代码块复制功能 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.js"></script>
+<script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="/js/clipboard_use.js"></script>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Canrad&#39;s Blog">Canrad&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:luiox.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2025/06/14/java-deobf开发日志2/" title="java deobf开发日志2" itemprop="url">java deobf开发日志2</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Canrad" target="_blank" itemprop="author">Canrad</a>
+		
+  <p class="article-time">
+    <time datetime="2025-06-14T12:28:03.000Z" itemprop="datePublished"> Published 2025-06-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%BB%E4%BB%A3%E7%A0%81%E6%B6%88%E9%99%A4"><span class="toc-number">1.</span> <span class="toc-text">死代码消除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A7%BB%E9%99%A4%E5%86%97%E4%BD%99%E8%B7%B3%E8%BD%AC"><span class="toc-number">2.</span> <span class="toc-text">移除冗余跳转</span></a></li></ol>
+		
+		</div>
+		
+		<p>上一篇已经处理到下面这个情况了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="literal">false</span>) &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">cfr_ignored_0</span> <span class="operator">=</span> <span class="number">17</span> + <span class="number">19</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对应的字节码如下。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    iconst_0 </span><br><span class="line">    ifeq B</span><br><span class="line">    nop </span><br><span class="line">    nop </span><br><span class="line">    bipush 17</span><br><span class="line">    bipush 19</span><br><span class="line">    iadd </span><br><span class="line">    pop </span><br><span class="line">B: </span><br></pre></td></tr></table></figure>
+
+<p>因为<code>ifeq</code>的含义是为0的时候跳转，而前面刚好已经加载了一个0，所以是必定跳转，因此我们可以在上一篇的基础上再加一个规则。</p>
+<p>如果匹配到连续的<code>iconst_0</code>和<code>ifeq</code>直接给他替换为<code>goto</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// iconst_0 - ifeq =&gt; goto</span></span><br><span class="line"><span class="type">MatchRule</span> <span class="variable">rule2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MatchRule</span>()</span><br><span class="line">        .addStep(StepUtil.iconst_0())</span><br><span class="line">        .addStep(StepUtil.ifeq())</span><br><span class="line">        .setStrategy(ctx -&gt; &#123;</span><br><span class="line">           <span class="type">var</span> <span class="variable">ifeqNode</span> <span class="operator">=</span> (JumpInsnNode)ctx.original.get(ctx.startIdx + <span class="number">1</span>);</span><br><span class="line">           ctx.builder.gotoo(ifeqNode.label);</span><br><span class="line">        &#125;);</span><br><span class="line">matcher.addRule(rule2);</span><br></pre></td></tr></table></figure>
+
+<p>那么我们还要做的一点是，要一直反复替换，直到不再有新的替换可以产生。而且我们可以观察到的一点是，替换一定是简化的，即指令数量在减少，如果没有减少，那么意味着没有替换了，就可以停止了。于是可以改为下面这样子。</p>
+<h2 id="死代码消除"><a href="#死代码消除" class="headerlink" title="死代码消除"></a>死代码消除</h2><p>那么这个时候就又有另外一个情况产生了。那就是死代码。这个死代码是不会有被执行对的可能性。即便是加上所有分支可能会发生，所有异常可能发生，但是也执行不到。</p>
+<p>栈帧分析，本质上是模拟指令的执行，如果一个指令没有被执行，那么对应的frame就会是null。因此除了<code>LabelNode</code>、<code>LineNumberNode</code>、<code>FrameNode</code>这种非指令的Node，其他指令型的Node如果是null，那么就说明不会被执行。所以通过栈帧分析可以知道，一个指令会不会被执行。</p>
+<p>所以可以写出下面这样子的一个Pass来清理死代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PassInfo(name = &quot;DeadCodeRemover&quot;, description = &quot;移除无用代码&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DeadCodeRemover</span> <span class="keyword">extends</span> <span class="title class_">MethodPass</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">(<span class="meta">@NotNull</span> MethodNode methodNode, <span class="meta">@NotNull</span> PassContext context)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (methodNode.instructions == <span class="literal">null</span> || methodNode.instructions.size() == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 栈帧分析</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Analyzer&lt;BasicValue&gt; analyzer = <span class="keyword">new</span> <span class="title class_">Analyzer</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">BasicInterpreter</span>());</span><br><span class="line">            Frame&lt;BasicValue&gt;[] frames = analyzer.analyze(context.currentClass.name, methodNode);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 删除无论如何不可能执行到的死代码</span></span><br><span class="line">            AbstractInsnNode[] insnNodes = methodNode.instructions.toArray();</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; frames.length; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (frames[i] == <span class="literal">null</span></span><br><span class="line">                        &amp;&amp; !(insnNodes[i] <span class="keyword">instanceof</span> LabelNode)</span><br><span class="line">                        &amp;&amp; !(insnNodes[i] <span class="keyword">instanceof</span> LineNumberNode)</span><br><span class="line">                        &amp;&amp; !(insnNodes[i] <span class="keyword">instanceof</span> FrameNode)) &#123;</span><br><span class="line">                    methodNode.instructions.remove(insnNodes[i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="移除冗余跳转"><a href="#移除冗余跳转" class="headerlink" title="移除冗余跳转"></a>移除冗余跳转</h2><p>因为我们的死代码消除以后，会留下一地的无效跳转。字节码如下。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">    goto B</span><br><span class="line">B: </span><br><span class="line">    invokespecial IlllPIllIIIIIyNAiIIIIIIIIIIIIIIIIIIlla.&lt;init&gt; ()V</span><br><span class="line">    bipush 7</span><br><span class="line">    newarray int</span><br><span class="line">    goto C</span><br><span class="line">C: </span><br><span class="line">    dup </span><br><span class="line">    iconst_0 </span><br><span class="line">    bipush 12</span><br><span class="line">    iastore </span><br><span class="line">    dup </span><br><span class="line">    goto D</span><br><span class="line">D: </span><br><span class="line">    iconst_1 </span><br><span class="line">    goto E</span><br><span class="line">E: </span><br></pre></td></tr></table></figure>
+
+<p>这里使用原始一点的方式来做这个替换，因为比较简单的。特征是一个<code>goto</code>，然后后面跟着他跳转的label。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PassInfo(name = &quot;Sample001Pass2&quot;, description = &quot;处理冗余跳转的pass&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sample001Pass2</span> <span class="keyword">extends</span> <span class="title class_">MethodPass</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">(<span class="meta">@NotNull</span> MethodNode methodNode, <span class="meta">@NotNull</span> PassContext context)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (methodNode.instructions == <span class="literal">null</span> || methodNode.instructions.size() == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        AbstractInsnNode[] insns = methodNode.instructions.toArray();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; insns.length; i++) &#123;</span><br><span class="line">            <span class="type">var</span> <span class="variable">insn</span>  <span class="operator">=</span> insns[i];</span><br><span class="line">            <span class="keyword">if</span> (insn <span class="keyword">instanceof</span> JumpInsnNode jumpInsnNode &amp;&amp; insn.getOpcode() == Opcodes.GOTO) &#123;</span><br><span class="line">                <span class="comment">// 检查一下i+1是否在范围内</span></span><br><span class="line">                <span class="keyword">if</span> (i + <span class="number">1</span> &gt;= insns.length) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="type">var</span> <span class="variable">next</span> <span class="operator">=</span> insns[i + <span class="number">1</span>];</span><br><span class="line">                <span class="comment">// 检查一下跳转的目标是否是下一个指令</span></span><br><span class="line">                <span class="keyword">if</span>(next <span class="keyword">instanceof</span> LabelNode labelNode &amp;&amp; labelNode == jumpInsnNode.label)&#123;</span><br><span class="line">                    <span class="comment">// 移除这个跳转</span></span><br><span class="line">                    methodNode.instructions.remove(insn);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>至此，我们已经达到了下面这个结果。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="comment">/* bridge */</span> <span class="comment">/* synthetic */</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] stringArray)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">    DNsPdL56Mhu.08QrUz();</span><br><span class="line">    DNsPdL56Mhu.9lqXN();</span><br><span class="line">    sIbV73dl.icKqMLNz();</span><br><span class="line">    Class[] classArray = <span class="keyword">new</span> <span class="title class_">Class</span>[<span class="number">0xCC9B</span> ^ <span class="number">0x65E1</span> ^ <span class="number">0xCAB6</span> ^ <span class="number">0x364</span> ^ (<span class="number">0xFFFFD608</span> ^ <span class="number">0x7227</span> ^ <span class="number">0xFFFFC911</span> ^ <span class="number">0xFFFF8F67</span>) ^ (<span class="number">0xF032</span> ^ <span class="number">0xD4E6</span> ^ <span class="number">0x6999</span> ^ <span class="number">0x1299</span>) ^ (<span class="number">0xFFFF8441</span> ^ <span class="number">0xFFFFE1CE</span> ^ <span class="number">0x18D4</span> ^ <span class="number">0xFFFFA07F</span>)];</span><br><span class="line">    classArray[<span class="number">0x7BA</span> ^ <span class="number">0xFFFF3B11</span> ^ <span class="number">0x95B7</span> ^ <span class="number">0xFFFFF993</span> ^ (<span class="number">0xFFFF82A5</span> ^ <span class="number">0xAB54</span> ^ <span class="number">0xFFFF9D24</span> ^ <span class="number">0xFFFF326A</span>) ^ (<span class="number">0x3154</span> ^ <span class="number">0xFFFFBC00</span> ^ <span class="number">0xAE5</span> ^ <span class="number">0xFFFFD6BD</span>) ^ (<span class="number">0x182A</span> ^ <span class="number">0xA4F3</span> ^ <span class="number">0x71EC</span> ^ <span class="number">0xFFFF4A09</span>)] = String[].class;</span><br><span class="line">    Object[] objectArray = <span class="keyword">new</span> <span class="title class_">Object</span>[<span class="number">0x1217</span> ^ <span class="number">0xFFFF88AA</span> ^ <span class="number">0x5A8E</span> ^ <span class="number">0xFFFFCB86</span> ^ (<span class="number">0x3FB9</span> ^ <span class="number">0x9B55</span> ^ <span class="number">0x643D</span> ^ <span class="number">0xFFFF5FBB</span>) ^ (<span class="number">0xDF26</span> ^ <span class="number">0x9BAE</span> ^ <span class="number">0x69A2</span> ^ <span class="number">0x5F65</span>) ^ (<span class="number">0xFFFFBF3B</span> ^ <span class="number">0xFFFF8633</span> ^ <span class="number">0x1E74</span> ^ <span class="number">0xFFFFC1ED</span>)];</span><br><span class="line">    objectArray[<span class="number">0x7913</span> ^ <span class="number">0xFFFFA672</span> ^ <span class="number">0x3B3B</span> ^ <span class="number">0xFFFFDF8B</span> ^ (<span class="number">0xFFFFF16A</span> ^ <span class="number">0x8FD7</span> ^ <span class="number">0xFFFFFB87</span> ^ <span class="number">0xFFFF5720</span>) ^ (<span class="number">0xB383</span> ^ <span class="number">0xFFFF206B</span> ^ <span class="number">0xC14</span> ^ <span class="number">0xFFFFFCC3</span>) ^ (<span class="number">0x15F7</span> ^ <span class="number">0xFDEF</span> ^ <span class="number">0x135E</span> ^ <span class="number">0xFFFF71B2</span>)] = stringArray;</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">IlllPIllIIIIIyNAiIIIIIIIIIIIIIIIIIIlla</span>().loadClass(IlllPIllIIIIIyNAiIIIIIIIIIIIIIIIIIIlla.3feb1bc713c99937(ziEF0305cOI.mEn(<span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">12</span>, <span class="number">28619</span>, <span class="number">58334</span>, <span class="number">54558</span>, <span class="number">44070</span>, <span class="number">47900</span>, <span class="number">38386</span>&#125;), -(-(-(-(-(-(-(-(<span class="number">0x9AFE</span> ^ <span class="number">0xFFFFA2BA</span> ^ <span class="number">0xE7E8</span> ^ <span class="number">0xFFFFC727</span> ^ (<span class="number">0x178F</span> ^ <span class="number">0x9ADB</span> ^ <span class="number">0x38E0</span> ^ <span class="number">0xFFFF7DC5</span>) ^ (<span class="number">0xEF8B</span> ^ <span class="number">0x10C7</span> ^ <span class="number">0xF049</span> ^ <span class="number">0x63BE</span>) ^ (<span class="number">0xFFFF8300</span> ^ <span class="number">0x6C6C</span> ^ <span class="number">0xFFFFD499</span> ^ <span class="number">0xFFFF8474</span>))))))))))).getMethod(IlllPIllIIIIIyNAiIIIIIIIIIIIIIIIIIIlla.3feb1bc713c99937(ziEF0305cOI.mEn(<span class="keyword">new</span> <span class="title class_">int</span>[]&#123;<span class="number">12</span>, <span class="number">28526</span>, <span class="number">53470</span>, <span class="number">22353</span>, <span class="number">44197</span>, <span class="number">43036</span>, <span class="number">19592</span>&#125;), -(-(-(-(<span class="number">0xF039</span> ^ <span class="number">0x5198</span> ^ <span class="number">0xF22B</span> ^ <span class="number">0x17B4</span> ^ (<span class="number">0xFFFFCA63</span> ^ <span class="number">0xFFFFB19F</span> ^ <span class="number">0xC89</span> ^ <span class="number">0xFFFF9EE1</span>) ^ (<span class="number">0xBAFA</span> ^ <span class="number">0xFFFF6130</span> ^ <span class="number">0x630</span> ^ <span class="number">0xFFFFE29C</span>) ^ (<span class="number">0x4E05</span> ^ <span class="number">0xDDF9</span> ^ <span class="number">0x2360</span> ^ <span class="number">0xFFFF2555</span>)))))), classArray).invoke(<span class="literal">null</span>, objectArray);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>还是有很多的异或，这些也可以消除。下一篇再解决这个问题。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Java/">Java</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://luiox.github.io/2025/06/14/java-deobf%E5%BC%80%E5%8F%91%E6%97%A5%E5%BF%972/" data-title="java deobf开发日志2 | Canrad&#39;s Blog" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2025/06/12/java-deobf开发日志1/"  title="java deobf开发日志1">
+ <strong>下一篇：</strong><br/> 
+ <span>java deobf开发日志1
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        // 为每个代码块添加复制按钮
+        document.querySelectorAll('.article-content .highlight').forEach(function(codeBlock) {
+            var button = document.createElement('button');
+            button.className = 'copy-button';
+            button.textContent = '复制';
+            button.title = '复制代码';
+            button.addEventListener('click', function() {
+                // 使用Clipboard.js复制代码块的内容到剪贴板
+                var clipboard = new ClipboardJS(button, {
+                    text: function(trigger) {
+                        // 找到按钮所在的代码块
+                        var codeBlock = trigger.closest('.highlight');
+                        // 获取所有的<pre>元素
+                        var preElements = codeBlock.querySelectorAll('pre');
+                        // 返回第二个<pre>元素的innerText
+                        return preElements[1].innerText;
+                    }
+                });
+                
+                clipboard.on('success', function(e) {
+                    //alert('代码复制成功');
+                    e.clearSelection();
+                    // 显示“复制成功”
+                    button.textContent = '复制成功';
+                    // 5秒后恢复为“复制”
+                    setTimeout(function() {
+                        button.textContent = '复制';
+                    }, 5000);
+                });
+                clipboard.on('error', function(e) {
+                    //alert('代码复制失败');
+                    e.clearSelection();
+                    // 显示“复制成功”
+                    button.textContent = '复制失败';
+                    // 5秒后恢复为“复制”
+                    setTimeout(function() {
+                        button.textContent = '复制';
+                    }, 5000);
+                    });
+            });
+            codeBlock.insertBefore(button, codeBlock.firstChild);
+            });
+        });
+    </script>
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%BB%E4%BB%A3%E7%A0%81%E6%B6%88%E9%99%A4"><span class="toc-number">1.</span> <span class="toc-text">死代码消除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A7%BB%E9%99%A4%E5%86%97%E4%BD%99%E8%B7%B3%E8%BD%AC"><span class="toc-number">2.</span> <span class="toc-text">移除冗余跳转</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Daily/" title="Daily">Daily<sup>7</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/FreeRTOS/" title="FreeRTOS">FreeRTOS<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C">C<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OCaml/" title="OCaml">OCaml<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> This is Canrad&#39;s home page. <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2025 
+		
+		<a href="/about" target="_blank" title="Canrad">Canrad</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
