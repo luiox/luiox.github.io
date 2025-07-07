@@ -5,24 +5,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>java-origincloud分析1 | Canrad&#39;s Blog</title>
+    <title>使用Obsidian作为笔记管理工具 | Canrad&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Canrad">
     
 
     
-    <meta name="description" content="java-origincloud分析1说明样本为Hex8，由origincloud提供，仅做学习交流使用。文件原始大小38.6MB。 基础异或混淆首先，先挑选一个类开始，那就从主类开始，通过fabric.mod.json，关键内容如下。 1&quot;entrypoints&quot;:&#123;&quot;main&quot;:[&quot;tech.origincloud.obf.prote">
+    <meta name="description" content="之前，我都是使用Joplin来管理我的笔记，然后辅之以Typora来编辑。但是，Joplin有一个很大的问题就是不方便自己管理图片。然后，昨天开始，我就尝试把笔记迁移到Obsidian上。Obsidian给我的一个感觉是使用体验相当不错。   我是借助了一个开源的工具来完成转移笔记的工作的。其Github的地址是：https:&#x2F;&#x2F;github.com&#x2F;luxi78&#x2F;joplin2obsidia">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java-origincloud分析1">
-<meta property="og:url" content="https://luiox.github.io/1885531415.html">
+<meta property="og:title" content="使用Obsidian作为笔记管理工具">
+<meta property="og:url" content="https://luiox.github.io/article/14.html">
 <meta property="og:site_name" content="Canrad&#39;s Blog">
-<meta property="og:description" content="java-origincloud分析1说明样本为Hex8，由origincloud提供，仅做学习交流使用。文件原始大小38.6MB。 基础异或混淆首先，先挑选一个类开始，那就从主类开始，通过fabric.mod.json，关键内容如下。 1&quot;entrypoints&quot;:&#123;&quot;main&quot;:[&quot;tech.origincloud.obf.prote">
+<meta property="og:description" content="之前，我都是使用Joplin来管理我的笔记，然后辅之以Typora来编辑。但是，Joplin有一个很大的问题就是不方便自己管理图片。然后，昨天开始，我就尝试把笔记迁移到Obsidian上。Obsidian给我的一个感觉是使用体验相当不错。   我是借助了一个开源的工具来完成转移笔记的工作的。其Github的地址是：https:&#x2F;&#x2F;github.com&#x2F;luxi78&#x2F;joplin2obsidia">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-06-26T15:17:03.000Z">
-<meta property="article:modified_time" content="2025-06-26T15:43:27.779Z">
+<meta property="article:published_time" content="2023-11-26T08:11:40.000Z">
+<meta property="article:modified_time" content="2025-07-07T09:32:41.837Z">
 <meta property="article:author" content="Canrad">
-<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Daily">
 <meta name="twitter:card" content="summary">
 
     
@@ -83,14 +83,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/1885531415.html" title="java-origincloud分析1" itemprop="url">java-origincloud分析1</a>
+      <a href="/article/14.html" title="使用Obsidian作为笔记管理工具" itemprop="url">使用Obsidian作为笔记管理工具</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Canrad" target="_blank" itemprop="author">Canrad</a>
 		
   <p class="article-time">
-    <time datetime="2025-06-26T15:17:03.000Z" itemprop="datePublished"> Published 2025-06-26</time>
+    <time datetime="2023-11-26T08:11:40.000Z" itemprop="datePublished"> Published 2023-11-26</time>
     
   </p>
 </header>
@@ -99,39 +99,23 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java-origincloud%E5%88%86%E6%9E%901"><span class="toc-number">1.</span> <span class="toc-text">java-origincloud分析1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-number">1.1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%BC%82%E6%88%96%E6%B7%B7%E6%B7%86"><span class="toc-number">1.2.</span> <span class="toc-text">基础异或混淆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-number">1.3.</span> <span class="toc-text">常量池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%B3%E8%BD%AC%E6%9D%A1%E4%BB%B6%E7%A1%AE%E5%AE%9A"><span class="toc-number">1.4.</span> <span class="toc-text">跳转条件确定</span></a></li></ol></li></ol>
+			
 		
 		</div>
 		
-		<h1 id="java-origincloud分析1"><a href="#java-origincloud分析1" class="headerlink" title="java-origincloud分析1"></a>java-origincloud分析1</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>样本为Hex8，由origincloud提供，仅做学习交流使用。文件原始大小38.6MB。</p>
-<h2 id="基础异或混淆"><a href="#基础异或混淆" class="headerlink" title="基础异或混淆"></a>基础异或混淆</h2><p>首先，先挑选一个类开始，那就从主类开始，通过<code>fabric.mod.json</code>，关键内容如下。</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;entrypoints&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;main&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="string">&quot;tech.origincloud.obf.protected_by_originshield_ \u0000妈崩&quot;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>所以从<code>妈崩</code>这个类开始分析，混淆强度是有的。</p>
-<p>随便翻翻，就可以发现有字面量混淆，大致就跟<code>static protected_by_originshield_ \u2000</code>下面这个方法这样子，就异或，还是比较简单。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>[] cArray = <span class="keyword">new</span> <span class="title class_">char</span>[<span class="number">0x65A0</span> ^ <span class="number">0xFFFFFAFA</span> ^ <span class="number">0x2F7C</span> ^ <span class="number">0xFFFFB020</span>];</span><br><span class="line">cArray[<span class="number">0x621</span> ^ <span class="number">0xFFFFFDCF</span> ^ <span class="number">0x638F</span> ^ <span class="number">0xFFFF9861</span>] = <span class="number">0x3FDD</span> ^ <span class="number">0xFFFFC640</span> ^ <span class="number">0xCEF</span> ^ <span class="number">0xFFFFF515</span>;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-
-<p>先使用<code>ArithmeticSimplifier</code>解决这个。规则是<code>load(I:v1) - load(I:v1) - ixor =&gt; load(I:v1 ^ v2)</code>。消除完成以后，可以减少0.3MB。</p>
-<h2 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h2><p>看下面这一小端代码。其中的<code>protected_by_originshield_ \u0000\u64cd\u7b28\u795e.\u5b5d </code>明显是一个字段。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var4_5 = <span class="number">813169406</span>;</span><br><span class="line"><span class="keyword">if</span> ((protected_by_originshield_ \u0000\u64cd\u7b28\u795e.\u5b5d | ~<span class="number">573956482</span>) - ~<span class="number">573956482</span> &lt;= var4_5) ** GOTO lbl25</span><br></pre></td></tr></table></figure>
-
-<p>然后找过去就有下面这样子的类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">protected_by_originshield_</span> \u0000\u64cd\u7b28\u795e &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="comment">/* synthetic */</span> <span class="type">int</span> \u4f60 = <span class="number">977450323</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="comment">/* synthetic */</span> <span class="type">int</span> \u5988 = <span class="number">1054751781</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="comment">/* synthetic */</span> <span class="type">int</span> \u50bb = <span class="number">1047944544</span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>利用<code>ConsStaticFieldReplacer</code>实现把这个常量静态字段传播过去。差不多会替换23455个地方，缩减约0.3MB。</p>
-<h2 id="跳转条件确定"><a href="#跳转条件确定" class="headerlink" title="跳转条件确定"></a>跳转条件确定</h2><p>之前的跳转判断条件，就已经转到下面这样子了。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var4_5 = <span class="number">813169406</span>;</span><br><span class="line"><span class="keyword">if</span> ((<span class="number">301914810</span> | ~<span class="number">573956482</span>) - ~<span class="number">573956482</span> &lt;= var4_5) ** GOTO lbl24</span><br></pre></td></tr></table></figure>
-
-<p>观察字节码如下。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ldc 813169406</span><br><span class="line">istore i4</span><br><span class="line">ldc 573956482</span><br><span class="line">ldc 301914810</span><br><span class="line">swap </span><br><span class="line">dup_x1 </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">ior </span><br><span class="line">swap </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">isub </span><br><span class="line">iload i4</span><br><span class="line">if_icmpgt G</span><br><span class="line">goto J</span><br></pre></td></tr></table></figure>
-
-<p>我的方案是，先做一个局部变量的常量传播优化，效果如下。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ldc 813169406</span><br><span class="line">istore i4</span><br><span class="line">ldc 573956482</span><br><span class="line">ldc 301914810</span><br><span class="line">swap </span><br><span class="line">dup_x1 </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">ior </span><br><span class="line">swap </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">isub </span><br><span class="line">ldc 813169406</span><br><span class="line">if_icmpgt G</span><br><span class="line">goto J</span><br></pre></td></tr></table></figure>
-
-<p>然后再做常量折叠，效果如下。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ldc 813169406</span><br><span class="line">istore i4</span><br><span class="line">ldc 3457154</span><br><span class="line">ldc 813169406</span><br><span class="line">if_icmpgt G</span><br><span class="line">goto J</span><br></pre></td></tr></table></figure>
-
-<p>这个时候，是一个常量条件了，<code>ConsJumpOptimizer</code>优化一下。</p>
+		<p>  之前，我都是使用<code>Joplin</code>来管理我的笔记，然后辅之以<code>Typora</code>来编辑。但是，<code>Joplin</code>有一个很大的问题就是不方便自己管理图片。然后，昨天开始，我就尝试把笔记迁移到<code>Obsidian</code>上。<code>Obsidian</code>给我的一个感觉是使用体验相当不错。</p>
+<p>  我是借助了一个开源的工具来完成转移笔记的工作的。其Github的地址是：<a target="_blank" rel="noopener" href="https://github.com/luxi78/joplin2obsidian">https://github.com/luxi78/joplin2obsidian</a>。</p>
+<p>  转移的方法</p>
+<ul>
+<li>利用Joplin的RAW模式导出所有笔记</li>
+<li>下载版本对应的release版本，并解压</li>
+<li>使用<code>-s</code>指定笔记的源地址，使用<code>-d</code>指定笔记的目标目录（Obsidian笔记的目录）<br>比如我这里源目录是<code>notes</code>，目标地址是<code>notes_obs</code>，那么就在shell或者是控制台里面输入<code>joplin2obsidian -s notes -d notes_obs</code>。确保目录的有效性，目标目录一定要自己创建好。否则会失败。</li>
+</ul>
+<hr>
+<p>  我现在装了<code>Excalidraw</code>，这个插件，给我的感觉就是可以代替<code>XMind</code>、<code>Draw.io</code>这样的绘图工具了。而且嵌入在笔记软件里面，很方便。<code>Obsidian</code>的一个很好用的地方就是模板，我之前每次写博客的时候，都需要从已经写好的文章中把那个文档属性的部分复制过来，因为我不太熟悉这个语法。仅仅只是<code>Hexo</code>的这个博客需要，然后我又不想每次都使用<code>hexo new</code>来创建一个文章的文件。基本上都是，在我的笔记中，创建一个文件，然后把之前的复制过来，把内容删掉，改一下时间。现在有了模板，只需要应用一下模板，减少了我去找之前文章的麻烦。真不错~😃</p>
+<p>  其次，就是，<code>Obsidian</code>的链接和关系图谱功能很吸引我，它可以把两个笔记之间创建连接，引用任何一篇自己笔记，或者是其中的一小部分、一个段落都可以。这比纯<code>Typora</code>强太多了。</p>
+<p>  尽管<code>Obsidian</code>有很多的好处，但是<code>Joplin</code>也并不是完全输给它，<code>Joplin</code>在同步方面就比<code>Obsidian</code>简单，而且是开源免费的。并且有好用的<code>[TOC]</code>，我非常喜欢<code>Joplin</code>和<code>Typora</code>的<code>[TOC]</code>功能。因此，我几乎每一个笔记都加了，但是在<code>Obsidian</code>上不起作用，我不得不花一些时间去消灭这些“<code>[TOC]</code>”。</p>
+<p>  如果是简单易用的话，那还是<code>Joplin</code>更加好一些，而<code>Obsidian</code>在笔记管理上更加强大一些。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -140,7 +124,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Java/">Java</a>
+  <span></span> <a href="/tags/Daily/">Daily</a>
   </div>
 
 </div>
@@ -149,7 +133,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://luiox.github.io/1885531415.html" data-title="java-origincloud分析1 | Canrad&#39;s Blog" data-tsina="" class="share clearfix">
+	  <div data-url="https://luiox.github.io/article/14.html" data-title="使用Obsidian作为笔记管理工具 | Canrad&#39;s Blog" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -162,11 +146,19 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/article/3.html" title="二零二三年十二月二十四日">
+  <strong>上一篇：</strong><br/>
+  <span>
+  二零二三年十二月二十四日</span>
+</a>
+</div>
+
 
 <div class="next">
-<a href="/undefined.html"  title="java deobf开发日志2">
+<a href="/article/13.html"  title="二零二三年十一月二十日">
  <strong>下一篇：</strong><br/> 
- <span>java deobf开发日志2
+ <span>二零二三年十一月二十日
 </span>
 </a>
 </div>
@@ -229,7 +221,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java-origincloud%E5%88%86%E6%9E%901"><span class="toc-number">1.</span> <span class="toc-text">java-origincloud分析1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-number">1.1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%BC%82%E6%88%96%E6%B7%B7%E6%B7%86"><span class="toc-number">1.2.</span> <span class="toc-text">基础异或混淆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-number">1.3.</span> <span class="toc-text">常量池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%B3%E8%BD%AC%E6%9D%A1%E4%BB%B6%E7%A1%AE%E5%AE%9A"><span class="toc-number">1.4.</span> <span class="toc-text">跳转条件确定</span></a></li></ol></li></ol>
+ 
  
   </div>
 
@@ -245,7 +237,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Daily/" title="Daily">Daily<sup>7</sup></a></li>
+				<li><a href="/tags/Daily/" title="Daily">Daily<sup>8</sup></a></li>
 			
 		
 			

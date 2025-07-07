@@ -5,24 +5,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>记录重新制作博客过程 | Canrad&#39;s Blog</title>
+    <title>java-origincloud分析1 | Canrad&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Canrad">
     
 
     
-    <meta name="description" content="记录重新制作博客过程在此之前，我尝过两次使用Jekyll和Github Page来制作个人博客，每次都是因为各种问题然后就放弃了。Jekyll需要Ruby 和MSYS2，安装这两个，这对我来说还算好，但是无法忍受的是我怎么也不能安装好Jektyll，可能是Windows的缘故，也有可能是我太笨了🤣🤣🤣。然后我就选择了Hexo，捣鼓了两个小时，总算是搞成了。 之所以选择Hexo，是在我前面失败">
+    <meta name="description" content="java-origincloud分析1说明样本为Hex8，由origincloud提供，仅做学习交流使用。文件原始大小38.6MB。 基础异或混淆首先，先挑选一个类开始，那就从主类开始，通过fabric.mod.json，关键内容如下。 1&quot;entrypoints&quot;:&#123;&quot;main&quot;:[&quot;tech.origincloud.obf.prote">
 <meta property="og:type" content="article">
-<meta property="og:title" content="记录重新制作博客过程">
-<meta property="og:url" content="https://luiox.github.io/undefined.html">
+<meta property="og:title" content="java-origincloud分析1">
+<meta property="og:url" content="https://luiox.github.io/article/18.html">
 <meta property="og:site_name" content="Canrad&#39;s Blog">
-<meta property="og:description" content="记录重新制作博客过程在此之前，我尝过两次使用Jekyll和Github Page来制作个人博客，每次都是因为各种问题然后就放弃了。Jekyll需要Ruby 和MSYS2，安装这两个，这对我来说还算好，但是无法忍受的是我怎么也不能安装好Jektyll，可能是Windows的缘故，也有可能是我太笨了🤣🤣🤣。然后我就选择了Hexo，捣鼓了两个小时，总算是搞成了。 之所以选择Hexo，是在我前面失败">
+<meta property="og:description" content="java-origincloud分析1说明样本为Hex8，由origincloud提供，仅做学习交流使用。文件原始大小38.6MB。 基础异或混淆首先，先挑选一个类开始，那就从主类开始，通过fabric.mod.json，关键内容如下。 1&quot;entrypoints&quot;:&#123;&quot;main&quot;:[&quot;tech.origincloud.obf.prote">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-09-26T13:40:54.000Z">
-<meta property="article:modified_time" content="2023-11-19T13:53:22.791Z">
+<meta property="article:published_time" content="2025-06-26T15:17:03.000Z">
+<meta property="article:modified_time" content="2025-07-06T08:56:49.199Z">
 <meta property="article:author" content="Canrad">
-<meta property="article:tag" content="Daily">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
 
     
@@ -83,14 +83,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/undefined.html" title="记录重新制作博客过程" itemprop="url">记录重新制作博客过程</a>
+      <a href="/article/18.html" title="java-origincloud分析1" itemprop="url">java-origincloud分析1</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Canrad" target="_blank" itemprop="author">Canrad</a>
 		
   <p class="article-time">
-    <time datetime="2023-09-26T13:40:54.000Z" itemprop="datePublished"> Published 2023-09-26</time>
+    <time datetime="2025-06-26T15:17:03.000Z" itemprop="datePublished"> Published 2025-06-26</time>
     
   </p>
 </header>
@@ -99,26 +99,39 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E9%87%8D%E6%96%B0%E5%88%B6%E4%BD%9C%E5%8D%9A%E5%AE%A2%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">记录重新制作博客过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%8F%E6%AC%A1%E6%9B%B4%E6%96%B0%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">每次更新的流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAmd%E6%96%87%E4%BB%B6%E3%80%82"><span class="toc-number">1.1.1.</span> <span class="toc-text">使用命令创建一个md文件。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.2.</span> <span class="toc-text">生成静态文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E5%88%B0github"><span class="toc-number">1.1.3.</span> <span class="toc-text">发布到github</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="toc-number">1.2.</span> <span class="toc-text">相关链接</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java-origincloud%E5%88%86%E6%9E%901"><span class="toc-number">1.</span> <span class="toc-text">java-origincloud分析1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-number">1.1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%BC%82%E6%88%96%E6%B7%B7%E6%B7%86"><span class="toc-number">1.2.</span> <span class="toc-text">基础异或混淆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-number">1.3.</span> <span class="toc-text">常量池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%B3%E8%BD%AC%E6%9D%A1%E4%BB%B6%E7%A1%AE%E5%AE%9A"><span class="toc-number">1.4.</span> <span class="toc-text">跳转条件确定</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<h1 id="记录重新制作博客过程"><a href="#记录重新制作博客过程" class="headerlink" title="记录重新制作博客过程"></a>记录重新制作博客过程</h1><p>在此之前，我尝过两次使用Jekyll和Github Page来制作个人博客，每次都是因为各种问题然后就放弃了。Jekyll需要Ruby 和MSYS2，安装这两个，这对我来说还算好，但是无法忍受的是我怎么也不能安装好Jektyll，可能是Windows的缘故，也有可能是我太笨了🤣🤣🤣。然后我就选择了Hexo，捣鼓了两个小时，总算是搞成了。</p>
-<p>之所以选择Hexo，是在我前面失败了很多次情况下，我尝试问ChatGPT，然后他告诉我，有Hexo这种仅仅只需要一个Node.js就能制作个人博客的好东西。刚好我是使用Typora，又经常要导出为pdf，所以有pandoc，而pandoc是需要Node.js。因此我电脑已经有Node.js，所以无需像Jekyll那样为了制作博客而大动干戈（安装软件，配置环境）。虽然在Linux下安装还是比较简单的，但是Windows上，配置起来可是想当麻烦。而且如果我把它安装在我的WSL2里，那可能会造成我的WSL2特别大。基于这些考虑，Hexo是我的最佳选择。</p>
-<p>然后我就开始挑选Hexo的主题，发现cactus这个主题非常不错，满足我的要求。我一开始的想法是只需要能够按照时间把我的文章分类，其次是方便提交。最好是能够搜索文章内容，但是没有这个功能也是无伤大雅的，大不了以后自己学个前端，然后加一下😃。</p>
-<p>关于制作这个博客，我就是按照安装教程安装了Hexo，然后使用<code>Hexo deploy</code>直接创建的，为此，我先把我原来的仓库删了。</p>
-<h2 id="每次更新的流程"><a href="#每次更新的流程" class="headerlink" title="每次更新的流程"></a>每次更新的流程</h2><h3 id="使用命令创建一个md文件。"><a href="#使用命令创建一个md文件。" class="headerlink" title="使用命令创建一个md文件。"></a>使用命令创建一个md文件。</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new &quot;文章标题&quot;</span><br></pre></td></tr></table></figure>
+		<h1 id="java-origincloud分析1"><a href="#java-origincloud分析1" class="headerlink" title="java-origincloud分析1"></a>java-origincloud分析1</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>样本为Hex8，由origincloud提供，仅做学习交流使用。文件原始大小38.6MB。</p>
+<h2 id="基础异或混淆"><a href="#基础异或混淆" class="headerlink" title="基础异或混淆"></a>基础异或混淆</h2><p>首先，先挑选一个类开始，那就从主类开始，通过<code>fabric.mod.json</code>，关键内容如下。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;entrypoints&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;main&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="string">&quot;tech.origincloud.obf.protected_by_originshield_ \u0000妈崩&quot;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="生成静态文件"><a href="#生成静态文件" class="headerlink" title="生成静态文件"></a>生成静态文件</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo generate</span><br></pre></td></tr></table></figure>
+<p>所以从<code>妈崩</code>这个类开始分析，混淆强度是有的。</p>
+<p>随便翻翻，就可以发现有字面量混淆，大致就跟<code>static protected_by_originshield_ \u2000</code>下面这个方法这样子，就异或，还是比较简单。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>[] cArray = <span class="keyword">new</span> <span class="title class_">char</span>[<span class="number">0x65A0</span> ^ <span class="number">0xFFFFFAFA</span> ^ <span class="number">0x2F7C</span> ^ <span class="number">0xFFFFB020</span>];</span><br><span class="line">cArray[<span class="number">0x621</span> ^ <span class="number">0xFFFFFDCF</span> ^ <span class="number">0x638F</span> ^ <span class="number">0xFFFF9861</span>] = <span class="number">0x3FDD</span> ^ <span class="number">0xFFFFC640</span> ^ <span class="number">0xCEF</span> ^ <span class="number">0xFFFFF515</span>;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
-<h3 id="发布到github"><a href="#发布到github" class="headerlink" title="发布到github"></a>发布到github</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo deploy</span><br></pre></td></tr></table></figure>
+<p>先使用<code>ArithmeticSimplifier</code>解决这个。规则是<code>load(I:v1) - load(I:v1) - ixor =&gt; load(I:v1 ^ v2)</code>。消除完成以后，可以减少0.3MB。</p>
+<h2 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h2><p>看下面这一小端代码。其中的<code>protected_by_originshield_ \u0000\u64cd\u7b28\u795e.\u5b5d </code>明显是一个字段。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var4_5 = <span class="number">813169406</span>;</span><br><span class="line"><span class="keyword">if</span> ((protected_by_originshield_ \u0000\u64cd\u7b28\u795e.\u5b5d | ~<span class="number">573956482</span>) - ~<span class="number">573956482</span> &lt;= var4_5) ** GOTO lbl25</span><br></pre></td></tr></table></figure>
 
+<p>然后找过去就有下面这样子的类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">protected_by_originshield_</span> \u0000\u64cd\u7b28\u795e &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="comment">/* synthetic */</span> <span class="type">int</span> \u4f60 = <span class="number">977450323</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="comment">/* synthetic */</span> <span class="type">int</span> \u5988 = <span class="number">1054751781</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="comment">/* synthetic */</span> <span class="type">int</span> \u50bb = <span class="number">1047944544</span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>利用<code>ConsStaticFieldReplacer</code>实现把这个常量静态字段传播过去。差不多会替换23455个地方，缩减约0.3MB。</p>
+<h2 id="跳转条件确定"><a href="#跳转条件确定" class="headerlink" title="跳转条件确定"></a>跳转条件确定</h2><p>之前的跳转判断条件，就已经转到下面这样子了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var4_5 = <span class="number">813169406</span>;</span><br><span class="line"><span class="keyword">if</span> ((<span class="number">301914810</span> | ~<span class="number">573956482</span>) - ~<span class="number">573956482</span> &lt;= var4_5) ** GOTO lbl24</span><br></pre></td></tr></table></figure>
 
-<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><p>Hexo安装教程：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/547520780">https://zhuanlan.zhihu.com/p/547520780</a></p>
-<p>Hexo的GithubPage设置：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/github-pages">https://hexo.io/zh-cn/docs/github-pages</a></p>
-<p>Hexo部署：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/one-command-deployment">https://hexo.io/zh-cn/docs/one-command-deployment</a></p>
-<p>Cactus仓库：<a target="_blank" rel="noopener" href="https://github.com/probberechts/hexo-theme-cactus">https://github.com/probberechts/hexo-theme-cactus</a></p>
+<p>观察字节码如下。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ldc 813169406</span><br><span class="line">istore i4</span><br><span class="line">ldc 573956482</span><br><span class="line">ldc 301914810</span><br><span class="line">swap </span><br><span class="line">dup_x1 </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">ior </span><br><span class="line">swap </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">isub </span><br><span class="line">iload i4</span><br><span class="line">if_icmpgt G</span><br><span class="line">goto J</span><br></pre></td></tr></table></figure>
+
+<p>我的方案是，先做一个局部变量的常量传播优化，效果如下。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ldc 813169406</span><br><span class="line">istore i4</span><br><span class="line">ldc 573956482</span><br><span class="line">ldc 301914810</span><br><span class="line">swap </span><br><span class="line">dup_x1 </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">ior </span><br><span class="line">swap </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">isub </span><br><span class="line">ldc 813169406</span><br><span class="line">if_icmpgt G</span><br><span class="line">goto J</span><br></pre></td></tr></table></figure>
+
+<p>然后再做常量折叠，效果如下。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ldc 813169406</span><br><span class="line">istore i4</span><br><span class="line">ldc 3457154</span><br><span class="line">ldc 813169406</span><br><span class="line">if_icmpgt G</span><br><span class="line">goto J</span><br></pre></td></tr></table></figure>
+
+<p>这个时候，是一个常量条件了，<code>ConsJumpOptimizer</code>优化一下。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -127,7 +140,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Daily/">Daily</a>
+  <span></span> <a href="/tags/Java/">Java</a>
   </div>
 
 </div>
@@ -136,7 +149,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://luiox.github.io/undefined.html" data-title="记录重新制作博客过程 | Canrad&#39;s Blog" data-tsina="" class="share clearfix">
+	  <div data-url="https://luiox.github.io/article/18.html" data-title="java-origincloud分析1 | Canrad&#39;s Blog" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -150,13 +163,21 @@
 <nav class="article-nav clearfix">
  
  <div class="prev" >
- <a href="/undefined.html" title="《OCaml From the Very Beginning》读书笔记1">
+ <a href="/article/19.html" title="hexo文章索引方案">
   <strong>上一篇：</strong><br/>
   <span>
-  《OCaml From the Very Beginning》读书笔记1</span>
+  hexo文章索引方案</span>
 </a>
 </div>
 
+
+<div class="next">
+<a href="/article/17.html"  title="java deobf开发日志2">
+ <strong>下一篇：</strong><br/> 
+ <span>java deobf开发日志2
+</span>
+</a>
+</div>
 
 </nav>
 
@@ -216,7 +237,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E9%87%8D%E6%96%B0%E5%88%B6%E4%BD%9C%E5%8D%9A%E5%AE%A2%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">记录重新制作博客过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%8F%E6%AC%A1%E6%9B%B4%E6%96%B0%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">每次更新的流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AAmd%E6%96%87%E4%BB%B6%E3%80%82"><span class="toc-number">1.1.1.</span> <span class="toc-text">使用命令创建一个md文件。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E9%9D%99%E6%80%81%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.2.</span> <span class="toc-text">生成静态文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E5%88%B0github"><span class="toc-number">1.1.3.</span> <span class="toc-text">发布到github</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E9%93%BE%E6%8E%A5"><span class="toc-number">1.2.</span> <span class="toc-text">相关链接</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java-origincloud%E5%88%86%E6%9E%901"><span class="toc-number">1.</span> <span class="toc-text">java-origincloud分析1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-number">1.1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%BC%82%E6%88%96%E6%B7%B7%E6%B7%86"><span class="toc-number">1.2.</span> <span class="toc-text">基础异或混淆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-number">1.3.</span> <span class="toc-text">常量池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%B3%E8%BD%AC%E6%9D%A1%E4%BB%B6%E7%A1%AE%E5%AE%9A"><span class="toc-number">1.4.</span> <span class="toc-text">跳转条件确定</span></a></li></ol></li></ol>
  
   </div>
 
@@ -232,7 +253,7 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Daily/" title="Daily">Daily<sup>7</sup></a></li>
+				<li><a href="/tags/Daily/" title="Daily">Daily<sup>8</sup></a></li>
 			
 		
 			
