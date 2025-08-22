@@ -5,24 +5,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>java-origincloud分析1 | Canrad&#39;s Blog</title>
+    <title>C语言之宏定义命名导致的问题 | Canrad&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Canrad">
     
 
     
-    <meta name="description" content="java-origincloud分析1说明样本为Hex8，由origincloud提供，仅做学习交流使用。文件原始大小38.6MB。 基础异或混淆首先，先挑选一个类开始，那就从主类开始，通过fabric.mod.json，关键内容如下。 1&quot;entrypoints&quot;:&#123;&quot;main&quot;:[&quot;tech.origincloud.obf.prote">
+    <meta name="description" content="昨天，我在Code Review的时候看到一个代码。这个又得牵扯到我之前为了将stm32工程从keil迁移到cmake的时候的事情了。 一个星期以前，我尝试了一下st最新推出的stm32 for vscode这个插件。这个插件出奇的方便，它会自己下载依赖，而且支持cmake，clangd这种先进工具。这都不是最重要的，最重要的是，它提供了一个分析器，也就是基于编译器的数据，分析ram、rom的占用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java-origincloud分析1">
-<meta property="og:url" content="https://luiox.github.io/article/18.html">
+<meta property="og:title" content="C语言之宏定义命名导致的问题">
+<meta property="og:url" content="https://luiox.github.io/article/24.html">
 <meta property="og:site_name" content="Canrad&#39;s Blog">
-<meta property="og:description" content="java-origincloud分析1说明样本为Hex8，由origincloud提供，仅做学习交流使用。文件原始大小38.6MB。 基础异或混淆首先，先挑选一个类开始，那就从主类开始，通过fabric.mod.json，关键内容如下。 1&quot;entrypoints&quot;:&#123;&quot;main&quot;:[&quot;tech.origincloud.obf.prote">
+<meta property="og:description" content="昨天，我在Code Review的时候看到一个代码。这个又得牵扯到我之前为了将stm32工程从keil迁移到cmake的时候的事情了。 一个星期以前，我尝试了一下st最新推出的stm32 for vscode这个插件。这个插件出奇的方便，它会自己下载依赖，而且支持cmake，clangd这种先进工具。这都不是最重要的，最重要的是，它提供了一个分析器，也就是基于编译器的数据，分析ram、rom的占用">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-06-26T15:17:03.000Z">
-<meta property="article:modified_time" content="2025-07-06T08:56:49.199Z">
+<meta property="article:published_time" content="2025-08-22T12:27:31.000Z">
+<meta property="article:modified_time" content="2025-08-22T12:49:31.135Z">
 <meta property="article:author" content="Canrad">
-<meta property="article:tag" content="Java">
+<meta property="article:tag" content="C">
 <meta name="twitter:card" content="summary">
 
     
@@ -83,14 +83,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/article/18.html" title="java-origincloud分析1" itemprop="url">java-origincloud分析1</a>
+      <a href="/article/24.html" title="C语言之宏定义命名导致的问题" itemprop="url">C语言之宏定义命名导致的问题</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Canrad" target="_blank" itemprop="author">Canrad</a>
 		
   <p class="article-time">
-    <time datetime="2025-06-26T15:17:03.000Z" itemprop="datePublished"> Published 2025-06-26</time>
+    <time datetime="2025-08-22T12:27:31.000Z" itemprop="datePublished"> Published 2025-08-22</time>
     
   </p>
 </header>
@@ -99,39 +99,27 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java-origincloud%E5%88%86%E6%9E%901"><span class="toc-number">1.</span> <span class="toc-text">java-origincloud分析1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-number">1.1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%BC%82%E6%88%96%E6%B7%B7%E6%B7%86"><span class="toc-number">1.2.</span> <span class="toc-text">基础异或混淆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-number">1.3.</span> <span class="toc-text">常量池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%B3%E8%BD%AC%E6%9D%A1%E4%BB%B6%E7%A1%AE%E5%AE%9A"><span class="toc-number">1.4.</span> <span class="toc-text">跳转条件确定</span></a></li></ol></li></ol>
+			
 		
 		</div>
 		
-		<h1 id="java-origincloud分析1"><a href="#java-origincloud分析1" class="headerlink" title="java-origincloud分析1"></a>java-origincloud分析1</h1><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>样本为Hex8，由origincloud提供，仅做学习交流使用。文件原始大小38.6MB。</p>
-<h2 id="基础异或混淆"><a href="#基础异或混淆" class="headerlink" title="基础异或混淆"></a>基础异或混淆</h2><p>首先，先挑选一个类开始，那就从主类开始，通过<code>fabric.mod.json</code>，关键内容如下。</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;entrypoints&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;main&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="string">&quot;tech.origincloud.obf.protected_by_originshield_ \u0000妈崩&quot;</span><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+		<p>昨天，我在Code Review的时候看到一个代码。这个又得牵扯到我之前为了将stm32工程从keil迁移到cmake的时候的事情了。</p>
+<p>一个星期以前，我尝试了一下st最新推出的<code>stm32 for vscode</code>这个插件。这个插件出奇的方便，它会自己下载依赖，而且支持cmake，clangd这种先进工具。这都不是最重要的，最重要的是，它提供了一个分析器，也就是基于编译器的数据，分析ram、rom的占用情况，包括编译好后的二进制文件里面，他的每个全局变量的内存占用的字节数。这个就让我有了极大的兴趣。在此之前，keil顶多告诉我们，整体的使用情况。</p>
+<p>然后我就尝试把之前的一个有点大的stm32工程移植到cmake。keil里面有一个特点是，允许循环头文件包含。但是似乎换了gcc以后就直接不让循环包含了。所谓循环包含就是，假设我有一个总的头文件<code>headfile.h</code>，里面我包含了全部的头文件，比如头文件<code>a.h</code>，但是我<code>a.c</code>里面包含了<code>a.h</code>以后，为了方便用过其他的头文件，我就偷懒包含以下<code>headfile.h</code>解决。这个在keil里面是完全可以的，但是gcc会告诉你，这个循环包含，然后直接就报错了。解决方法，我就只能每个按需包含，而且让这个bsp层的万能头文件只能在app层使用，bsp层禁止循环包含了。</p>
+<p>到现在为止，问题还没有出现。问题就出现在了这个<code>headfile.h</code>里面，当我尝试把一个头文件<code>a.h</code>提到最前面（比st的hal库还前面）包含的时候，问题就发生了。</p>
+<p>这个头文件里面定义了一个宏，大致内容如下。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> Offset 0x88</span></span><br></pre></td></tr></table></figure>
 
-<p>所以从<code>妈崩</code>这个类开始分析，混淆强度是有的。</p>
-<p>随便翻翻，就可以发现有字面量混淆，大致就跟<code>static protected_by_originshield_ \u2000</code>下面这个方法这样子，就异或，还是比较简单。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">char</span>[] cArray = <span class="keyword">new</span> <span class="title class_">char</span>[<span class="number">0x65A0</span> ^ <span class="number">0xFFFFFAFA</span> ^ <span class="number">0x2F7C</span> ^ <span class="number">0xFFFFB020</span>];</span><br><span class="line">cArray[<span class="number">0x621</span> ^ <span class="number">0xFFFFFDCF</span> ^ <span class="number">0x638F</span> ^ <span class="number">0xFFFF9861</span>] = <span class="number">0x3FDD</span> ^ <span class="number">0xFFFFC640</span> ^ <span class="number">0xCEF</span> ^ <span class="number">0xFFFFF515</span>;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>然后碰巧的是，stm32的hal库的头文件里面，有个别结构体的代码如下。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> xxx&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="type">uint32_t</span> Offset;</span><br><span class="line">&#125;xxx;</span><br></pre></td></tr></table></figure>
 
-<p>先使用<code>ArithmeticSimplifier</code>解决这个。规则是<code>load(I:v1) - load(I:v1) - ixor =&gt; load(I:v1 ^ v2)</code>。消除完成以后，可以减少0.3MB。</p>
-<h2 id="常量池"><a href="#常量池" class="headerlink" title="常量池"></a>常量池</h2><p>看下面这一小端代码。其中的<code>protected_by_originshield_ \u0000\u64cd\u7b28\u795e.\u5b5d </code>明显是一个字段。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var4_5 = <span class="number">813169406</span>;</span><br><span class="line"><span class="keyword">if</span> ((protected_by_originshield_ \u0000\u64cd\u7b28\u795e.\u5b5d | ~<span class="number">573956482</span>) - ~<span class="number">573956482</span> &lt;= var4_5) ** GOTO lbl25</span><br></pre></td></tr></table></figure>
-
-<p>然后找过去就有下面这样子的类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">protected_by_originshield_</span> \u0000\u64cd\u7b28\u795e &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="comment">/* synthetic */</span> <span class="type">int</span> \u4f60 = <span class="number">977450323</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="comment">/* synthetic */</span> <span class="type">int</span> \u5988 = <span class="number">1054751781</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="comment">/* synthetic */</span> <span class="type">int</span> \u50bb = <span class="number">1047944544</span>;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>利用<code>ConsStaticFieldReplacer</code>实现把这个常量静态字段传播过去。差不多会替换23455个地方，缩减约0.3MB。</p>
-<h2 id="跳转条件确定"><a href="#跳转条件确定" class="headerlink" title="跳转条件确定"></a>跳转条件确定</h2><p>之前的跳转判断条件，就已经转到下面这样子了。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var4_5 = <span class="number">813169406</span>;</span><br><span class="line"><span class="keyword">if</span> ((<span class="number">301914810</span> | ~<span class="number">573956482</span>) - ~<span class="number">573956482</span> &lt;= var4_5) ** GOTO lbl24</span><br></pre></td></tr></table></figure>
-
-<p>观察字节码如下。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ldc 813169406</span><br><span class="line">istore i4</span><br><span class="line">ldc 573956482</span><br><span class="line">ldc 301914810</span><br><span class="line">swap </span><br><span class="line">dup_x1 </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">ior </span><br><span class="line">swap </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">isub </span><br><span class="line">iload i4</span><br><span class="line">if_icmpgt G</span><br><span class="line">goto J</span><br></pre></td></tr></table></figure>
-
-<p>我的方案是，先做一个局部变量的常量传播优化，效果如下。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">ldc 813169406</span><br><span class="line">istore i4</span><br><span class="line">ldc 573956482</span><br><span class="line">ldc 301914810</span><br><span class="line">swap </span><br><span class="line">dup_x1 </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">ior </span><br><span class="line">swap </span><br><span class="line">iconst_m1 </span><br><span class="line">ixor </span><br><span class="line">isub </span><br><span class="line">ldc 813169406</span><br><span class="line">if_icmpgt G</span><br><span class="line">goto J</span><br></pre></td></tr></table></figure>
-
-<p>然后再做常量折叠，效果如下。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ldc 813169406</span><br><span class="line">istore i4</span><br><span class="line">ldc 3457154</span><br><span class="line">ldc 813169406</span><br><span class="line">if_icmpgt G</span><br><span class="line">goto J</span><br></pre></td></tr></table></figure>
-
-<p>这个时候，是一个常量条件了，<code>ConsJumpOptimizer</code>优化一下。</p>
+<p>于是就被替换变成了<code>uint32_t 0x88</code>，然后编译器直接到处报错。那上百个错误真是触目惊心了。我当时看了好一会，一开始怎么也想不到，这hal库内部怎么出错呢。然后我对着重构时候的git历史里面的差异看，结果就是因为这个头文件调换的问题。然后我的解决方案就是把这个外部不用的宏，塞到他自己的源文件里面。这个宏的名字的问题，后面再重构解决。</p>
+<p>这个问题的本质是，有一个常量宏，它定义为一个很常用的名称，而且不是一个全大写的情况。于是就导致了宏把变量名都替换了的问题。</p>
+<p>所以就总结出来两条规则。</p>
+<ol>
+<li><strong>常量宏应该全部大写，而且尽可能具体而详细的描述</strong>。避免单个单词的这种命名与常用的变量名一样。</li>
+<li><strong>尽可能少的在头文件暴露宏，除非必须，要不然应该定义在源文件内</strong>。</li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -140,7 +128,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Java/">Java</a>
+  <span></span> <a href="/tags/C/">C</a>
   </div>
 
 </div>
@@ -149,7 +137,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://luiox.github.io/article/18.html" data-title="java-origincloud分析1 | Canrad&#39;s Blog" data-tsina="" class="share clearfix">
+	  <div data-url="https://luiox.github.io/article/24.html" data-title="C语言之宏定义命名导致的问题 | Canrad&#39;s Blog" data-tsina="" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -162,19 +150,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/article/19.html" title="hexo文章索引方案">
-  <strong>上一篇：</strong><br/>
-  <span>
-  hexo文章索引方案</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/article/17.html"  title="java deobf开发日志2">
+<a href="/article/23.html"  title="sfud移植和使用">
  <strong>下一篇：</strong><br/> 
- <span>java deobf开发日志2
+ <span>sfud移植和使用
 </span>
 </a>
 </div>
@@ -237,7 +217,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#java-origincloud%E5%88%86%E6%9E%901"><span class="toc-number">1.</span> <span class="toc-text">java-origincloud分析1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%B4%E6%98%8E"><span class="toc-number">1.1.</span> <span class="toc-text">说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%BC%82%E6%88%96%E6%B7%B7%E6%B7%86"><span class="toc-number">1.2.</span> <span class="toc-text">基础异或混淆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-number">1.3.</span> <span class="toc-text">常量池</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%B3%E8%BD%AC%E6%9D%A1%E4%BB%B6%E7%A1%AE%E5%AE%9A"><span class="toc-number">1.4.</span> <span class="toc-text">跳转条件确定</span></a></li></ol></li></ol>
+ 
  
   </div>
 
@@ -257,7 +237,7 @@
 			
 		
 			
-				<li><a href="/tags/Java/" title="Java">Java<sup>4</sup></a></li>
+				<li><a href="/tags/Java/" title="Java">Java<sup>3</sup></a></li>
 			
 		
 			
@@ -265,11 +245,11 @@
 			
 		
 			
-				<li><a href="/tags/Embedded/" title="Embedded">Embedded<sup>2</sup></a></li>
+				<li><a href="/tags/C/" title="C">C<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/C/" title="C">C<sup>1</sup></a></li>
+				<li><a href="/tags/Embedded/" title="Embedded">Embedded<sup>2</sup></a></li>
 			
 		
 			
