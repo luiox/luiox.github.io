@@ -1,0 +1,543 @@
+
+ <!DOCTYPE HTML>
+<html lang="en">
+<link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>SeggerRTT与Ozone调试技术 | Canrad&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Canrad">
+    
+
+    
+    <meta name="description" content="介绍SEGGER RTT在vscode上，使用Cortex Debug作为观测RTT数据，然后使用Ozone实现观测变量变化的方案。 RTT什么是RTT，为什么使用SEGGER RTT而不是串口打印调试程序SEGGER RTT，全称是SEGGER  Real Time Transfer。RTT本质上是在程序中开一个环形缓冲区，打印时数据写入该区域，调试器通过SWD接口读取缓冲区，并由RTT客户端显">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SeggerRTT与Ozone调试技术">
+<meta property="og:url" content="https://luiox.github.io/article/26.html">
+<meta property="og:site_name" content="Canrad&#39;s Blog">
+<meta property="og:description" content="介绍SEGGER RTT在vscode上，使用Cortex Debug作为观测RTT数据，然后使用Ozone实现观测变量变化的方案。 RTT什么是RTT，为什么使用SEGGER RTT而不是串口打印调试程序SEGGER RTT，全称是SEGGER  Real Time Transfer。RTT本质上是在程序中开一个环形缓冲区，打印时数据写入该区域，调试器通过SWD接口读取缓冲区，并由RTT客户端显">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-03-02T03:09:34.000Z">
+<meta property="article:modified_time" content="2026-03-02T03:09:21.327Z">
+<meta property="article:author" content="Canrad">
+<meta property="article:tag" content="Embedded">
+<meta name="twitter:card" content="summary">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Canrad&#39;s Blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+ <!-- 代码块复制功能 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.js"></script>
+<script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="/js/clipboard_use.js"></script>
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Canrad&#39;s Blog">Canrad&#39;s Blog</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:luiox.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/article/26.html" title="SeggerRTT与Ozone调试技术" itemprop="url">SeggerRTT与Ozone调试技术</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Canrad" target="_blank" itemprop="author">Canrad</a>
+		
+  <p class="article-time">
+    <time datetime="2026-03-02T03:09:34.000Z" itemprop="datePublished"> Published 2026-03-02</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RTT"><span class="toc-number">1.</span> <span class="toc-text">RTT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFRTT%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8SEGGER-RTT%E8%80%8C%E4%B8%8D%E6%98%AF%E4%B8%B2%E5%8F%A3%E6%89%93%E5%8D%B0%E8%B0%83%E8%AF%95%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.1.</span> <span class="toc-text">什么是RTT，为什么使用SEGGER RTT而不是串口打印调试程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%8E%B7%E5%BE%97SEGGER-RTT%E7%9A%84%E6%BA%90%E7%A0%81"><span class="toc-number">1.2.</span> <span class="toc-text">如何获得SEGGER RTT的源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8RTT%E6%89%93%E5%8D%B0%EF%BC%8C%E5%B9%B6%E4%B8%94%E5%9C%A8Cortex-Debug%E4%B8%8A%E6%9F%A5%E7%9C%8B"><span class="toc-number">1.3.</span> <span class="toc-text">使用RTT打印，并且在Cortex Debug上查看</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E7%83%A7%E5%BD%95%E4%BB%85%E9%99%84%E5%8A%A0%E8%B0%83%E8%AF%95%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">不烧录仅附加调试的方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ozone"><span class="toc-number">2.</span> <span class="toc-text">Ozone</span></a></li></ol>
+		
+		</div>
+		
+		<p>介绍SEGGER RTT在vscode上，使用Cortex Debug作为观测RTT数据，然后使用Ozone实现观测变量变化的方案。</p>
+<h1 id="RTT"><a href="#RTT" class="headerlink" title="RTT"></a>RTT</h1><h2 id="什么是RTT，为什么使用SEGGER-RTT而不是串口打印调试程序"><a href="#什么是RTT，为什么使用SEGGER-RTT而不是串口打印调试程序" class="headerlink" title="什么是RTT，为什么使用SEGGER RTT而不是串口打印调试程序"></a>什么是RTT，为什么使用SEGGER RTT而不是串口打印调试程序</h2><p>SEGGER RTT，全称是SEGGER  Real Time Transfer。RTT本质上是在程序中开一个环形缓冲区，打印时数据写入该区域，调试器通过SWD接口读取缓冲区，并由RTT客户端显示，因此无需额外硬件资源。而且不同于传统的半主机模式依赖于等待调试器，RTT的数据在没有被读取的时候，依旧会被覆盖，因为MCU不会等待调试器，所以即便是去掉调试器，依然没有任何影响。因为它仅仅需要内存写入数据，而无需像串口打印一样等待数据发出，这就做到了对程序的侵入性最低。</p>
+<p>因为RTT仅仅是软件层面的协议，而且走的是标准SWD接口，即便是SEGGER RTT一开始是为jlink设计的，但是支持SWD接口的调试器（如DAPLink、ST-Link）也能使用RTT。</p>
+<h2 id="如何获得SEGGER-RTT的源码"><a href="#如何获得SEGGER-RTT的源码" class="headerlink" title="如何获得SEGGER RTT的源码"></a>如何获得SEGGER RTT的源码</h2><p>在官网<a target="_blank" rel="noopener" href="https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack%E8%BF%99%E4%B8%AA%E9%93%BE%E6%8E%A5%E4%B8%8B%EF%BC%8C%E6%8C%89%E7%85%A7jlink%E9%A9%B1%E5%8A%A8%EF%BC%8C%E7%84%B6%E5%90%8E%E5%9C%A8%E8%B7%AF%E5%BE%84%60SEGGER\JLink\Samples\RTT%60%E8%BF%99%E4%B8%AA%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%9C%89%E4%B8%80%E4%B8%AA%E5%8E%8B%E7%BC%A9%E5%8C%85%EF%BC%8C%E5%8F%AB%E5%81%9A%60SEGGER_RTT_V722b.zip%60%EF%BC%8C%E7%84%B6%E5%90%8E%E6%89%93%E5%BC%80%E4%BB%A5%E5%90%8E%EF%BC%8C%E5%9C%A8RTT%E7%9B%AE%E5%BD%95%E5%86%85%E6%9C%89%E4%B8%8B%E9%9D%A2%E8%BF%99%E4%B8%AA%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8%E7%9A%84%E6%96%87%E4%BB%B6%E3%80%82">https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack这个链接下，按照jlink驱动，然后在路径`SEGGER\JLink\Samples\RTT`这个目录下有一个压缩包，叫做`SEGGER_RTT_V722b.zip`，然后打开以后，在RTT目录内有下面这个文件列表的文件。</a></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SEGGER_RTT.c</span><br><span class="line">SEGGER_RTT.h</span><br><span class="line">SEGGER_RTT_ASM_ARMv7M.S</span><br><span class="line">SEGGER_RTT_Conf.h</span><br><span class="line">SEGGER_RTT_printf.c</span><br></pre></td></tr></table></figure>
+
+<p>我们不要这个<code>SEGGER_RTT_ASM_ARMv7M.S</code>文件。把剩余的这些都添加进项目即可。</p>
+<h2 id="使用RTT打印，并且在Cortex-Debug上查看"><a href="#使用RTT打印，并且在Cortex-Debug上查看" class="headerlink" title="使用RTT打印，并且在Cortex Debug上查看"></a>使用RTT打印，并且在Cortex Debug上查看</h2><p>RTT在代码上的使用方法主要是有下面这两个函数。这个<code>SEGGER_RTT_Init</code>在程序一开始初始化一下RTT即可。而<code>SEGGER_RTT_printf</code>和<code>printf</code>在使用方法上唯一的区别就是第一个参数是一个索引。一般来说就填0，也就是终端输出。这个索引是目标的缓冲区的索引。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">SEGGER_RTT_Init</span><span class="params">(<span class="type">void</span>)</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">SEGGER_RTT_printf</span><span class="params">(<span class="type">unsigned</span> BufferIndex, <span class="type">const</span> <span class="type">char</span> * sFormat, ...)</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后Cortex Debug插件的配置我就不重复了，依旧是要准备好OpenOCD的配置。<code>setting.json</code>的配置参考如下。关键是<code>&quot;cortex-debug.openocdPath&quot;</code>这个需要配置好。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;cortex-debug.liveWatchRefreshRate&quot;: 100,</span><br><span class="line">&quot;cortex-debug.armToolchainPath&quot;: &quot;D:/sdk/Arm GNU Toolchain arm-none-eabi/11.3 rel1/bin&quot;,</span><br><span class="line">&quot;cortex-debug.openocdPath&quot;: &quot;D:/sdk/OpenOCD/bin/openocd.exe&quot;,</span><br></pre></td></tr></table></figure>
+
+<p>因为Cortex Debug插件在2022年就已经支持RTT了，也不需要网上那些教程改cfg文件的方案了。关于这一点的详细信息可以查看<a target="_blank" rel="noopener" href="https://github.com/Marus/cortex-debug/wiki/SEGGER-RTT-support%E3%80%82">https://github.com/Marus/cortex-debug/wiki/SEGGER-RTT-support。</a></p>
+<p>当然不看也没有问题，我们主要是要配置项目目录下的<code>.vscode/launch.json</code>文件即可。下面我给出一个典型配置。有几点要注意的，我都加了注释了。<code>$&#123;workspaceRoot&#125;</code>是你工作区的路径的变量，使用这个相对定位，而不是写绝对路径。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    // 启动调试的快捷键是F5</span><br><span class="line">    &quot;version&quot;: &quot;0.2.0&quot;,</span><br><span class="line">    &quot;configurations&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">        	// 启动项的名字</span><br><span class="line">            &quot;name&quot;: &quot;Launch bootloader (DAP)&quot;,</span><br><span class="line">            &quot;cwd&quot;: &quot;$&#123;workspaceRoot&#125;&quot;,</span><br><span class="line">            // 把这个executable的路径改成你的elf或者axf文件的路径</span><br><span class="line">            &quot;executable&quot;: &quot;$&#123;workspaceRoot&#125;\\build\\artifacts\\bootloader.elf&quot;,</span><br><span class="line">            &quot;request&quot;: &quot;launch&quot;,</span><br><span class="line">            &quot;type&quot;: &quot;cortex-debug&quot;,</span><br><span class="line">            // 写你的MCU型号</span><br><span class="line">            &quot;device&quot;: &quot;STM32F103RC&quot;,</span><br><span class="line">            &quot;interface&quot;: &quot;swd&quot;,</span><br><span class="line">            &quot;servertype&quot;: &quot;openocd&quot;,</span><br><span class="line">            // 配置文件</span><br><span class="line">            &quot;configFiles&quot;: [</span><br><span class="line">            	// 如果是stlink v2就改为interface/stlink-v2.cfg</span><br><span class="line">                &quot;interface/cmsis-dap.cfg&quot;,</span><br><span class="line">                // 根据型号选择你的cfg</span><br><span class="line">                &quot;target/stm32f1x.cfg&quot;</span><br><span class="line">            ],</span><br><span class="line">            &quot;runToEntryPoint&quot;: &quot;main&quot;,</span><br><span class="line">            // preLaunchTask这个是一个在这个启动之前的任务，如果你不需要可以删除</span><br><span class="line">            &quot;preLaunchTask&quot;: &quot;build bootloader&quot;,</span><br><span class="line">            &quot;liveWatch&quot;: &#123;</span><br><span class="line">                &quot;enabled&quot;: true,</span><br><span class="line">                &quot;samplesPerSecond&quot;: 4</span><br><span class="line">            &#125;,</span><br><span class="line">            // 添加以下 RTT 配置</span><br><span class="line">            &quot;rttConfig&quot;: &#123;</span><br><span class="line">                &quot;enabled&quot;: true,</span><br><span class="line">                &quot;address&quot;: &quot;auto&quot;,</span><br><span class="line">                &quot;clearSearch&quot;: false,</span><br><span class="line">                &quot;decoders&quot;: [</span><br><span class="line">                    &#123;</span><br><span class="line">                    	// 这个label标签是在打开RTT以后终端的名字，不写就是默认的</span><br><span class="line">                        &quot;label&quot;: &quot;&quot;,</span><br><span class="line">                        // 这个port就是对应你的SEGGER_RTT_printf的第一个参数</span><br><span class="line">                        &quot;port&quot;: 0,</span><br><span class="line">                        &quot;type&quot;: &quot;console&quot;</span><br><span class="line">                    &#125;</span><br><span class="line">                ]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每次复制粘贴到一个新项目，主要要改的项目我列了一个表格。如果你不需要这个<code>preLaunchTask</code>，你可以把这行删掉，这样子就不会出错了。代价就是，你每次烧录之前都需要自己先构建，保证程序文件是最新的。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">name</span><br><span class="line">executable</span><br><span class="line">device</span><br><span class="line">configFiles</span><br><span class="line">preLaunchTask</span><br></pre></td></tr></table></figure>
+
+<p>然后我再解释这个<code>preLaunchTask</code>的作用，一般来说，Keil不都是要先构建再下载嘛，那么为了方便，让它自己在烧录程序之前构建一下。这个需要利用vscode的任务系统，在<code>.vscode</code>路径下建一个<code>tasks.json</code>文件内容像是下面这样子写。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2.0.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tasks&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;label&quot;</span><span class="punctuation">:</span> <span class="string">&quot;build bootloader&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;shell&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;xmake f -p cross -a arm -m debug &amp;&amp; xmake build bootloader&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;problemMatcher&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span>          </span><br><span class="line">            <span class="attr">&quot;group&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;kind&quot;</span><span class="punctuation">:</span> <span class="string">&quot;build&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;isDefault&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>我这个是xmake的构建的，如果是cmake或者makefile，请自行修改<code>command</code>填入构建命令。</p>
+<p>然后你使用vscode的<code>Run and Debug</code>页面启动，它就会自己先编译然后烧录了。运行以后，会单独开一个RTT的终端，显示这些信息。</p>
+<h2 id="不烧录仅附加调试的方法"><a href="#不烧录仅附加调试的方法" class="headerlink" title="不烧录仅附加调试的方法"></a>不烧录仅附加调试的方法</h2><p><code>launch.json</code>的配置如下。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Attach bootloader (DAP)&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;cwd&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;workspaceRoot&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;executable&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;workspaceRoot&#125;\\build\\artifacts\\bootloader.elf&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;attach&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cortex-debug&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;device&quot;</span><span class="punctuation">:</span> <span class="string">&quot;STM32F103RC&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;interface&quot;</span><span class="punctuation">:</span> <span class="string">&quot;swd&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;servertype&quot;</span><span class="punctuation">:</span> <span class="string">&quot;openocd&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;configFiles&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;interface/cmsis-dap.cfg&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;target/stm32f1x.cfg&quot;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;liveWatch&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;enabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;samplesPerSecond&quot;</span><span class="punctuation">:</span> <span class="number">4</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;rttConfig&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;enabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;address&quot;</span><span class="punctuation">:</span> <span class="string">&quot;auto&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;clearSearch&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;decoders&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;label&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;console&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="Ozone"><a href="#Ozone" class="headerlink" title="Ozone"></a>Ozone</h1><p>Ozone是一个SEGGER给jlink开发的软件，当然因为一些特殊原因，所以daplink也能用。关于这个软件的安装可以参考<a target="_blank" rel="noopener" href="https://gitee.com/hnuyuelurm/basic_framework/blob/master/.Doc/VSCode%2BOzone%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95.md#ozone%E5%8F%AF%E8%A7%86%E5%8C%96%E8%B0%83%E8%AF%95%E5%92%8Clog%E5%8A%9F%E8%83%BD">https://gitee.com/hnuyuelurm/basic_framework&#x2F;blob&#x2F;master&#x2F;.Doc&#x2F;VSCode%2BOzone%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95.md#ozone%E5%8F%AF%E8%A7%86%E5%8C%96%E8%B0%83%E8%AF%95%E5%92%8Clog%E5%8A%9F%E8%83%BD</a>。</p>
+<p>他这个教程已经很详细了，我就简单总结一下，Ozone我们一般是只用他的数据采样和绘制曲线图的功能。方便PID参数整定。</p>
+<p>注意一点，所以要被采样的变量必须是全局变量，因为局部变量没有一个固定地址。选中要观测的变量，然后按<code>ctrl+w</code>即可添加进<code>watch</code>，然后在<code>watch</code>上选中，按<code>ctrl+g</code>就可以加进绘图的<code>Timeline</code>窗口。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Embedded/">Embedded</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://luiox.github.io/article/26.html" data-title="SeggerRTT与Ozone调试技术 | Canrad&#39;s Blog" data-tsina="" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/article/25.html"  title="xmake开发stm32方案">
+ <strong>下一篇：</strong><br/> 
+ <span>xmake开发stm32方案
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        // 为每个代码块添加复制按钮
+        document.querySelectorAll('.article-content .highlight').forEach(function(codeBlock) {
+            var button = document.createElement('button');
+            button.className = 'copy-button';
+            button.textContent = '复制';
+            button.title = '复制代码';
+            button.addEventListener('click', function() {
+                // 使用Clipboard.js复制代码块的内容到剪贴板
+                var clipboard = new ClipboardJS(button, {
+                    text: function(trigger) {
+                        // 找到按钮所在的代码块
+                        var codeBlock = trigger.closest('.highlight');
+                        // 获取所有的<pre>元素
+                        var preElements = codeBlock.querySelectorAll('pre');
+                        // 返回第二个<pre>元素的innerText
+                        return preElements[1].innerText;
+                    }
+                });
+                
+                clipboard.on('success', function(e) {
+                    //alert('代码复制成功');
+                    e.clearSelection();
+                    // 显示“复制成功”
+                    button.textContent = '复制成功';
+                    // 5秒后恢复为“复制”
+                    setTimeout(function() {
+                        button.textContent = '复制';
+                    }, 5000);
+                });
+                clipboard.on('error', function(e) {
+                    //alert('代码复制失败');
+                    e.clearSelection();
+                    // 显示“复制成功”
+                    button.textContent = '复制失败';
+                    // 5秒后恢复为“复制”
+                    setTimeout(function() {
+                        button.textContent = '复制';
+                    }, 5000);
+                    });
+            });
+            codeBlock.insertBefore(button, codeBlock.firstChild);
+            });
+        });
+    </script>
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#RTT"><span class="toc-number">1.</span> <span class="toc-text">RTT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFRTT%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8SEGGER-RTT%E8%80%8C%E4%B8%8D%E6%98%AF%E4%B8%B2%E5%8F%A3%E6%89%93%E5%8D%B0%E8%B0%83%E8%AF%95%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.1.</span> <span class="toc-text">什么是RTT，为什么使用SEGGER RTT而不是串口打印调试程序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E8%8E%B7%E5%BE%97SEGGER-RTT%E7%9A%84%E6%BA%90%E7%A0%81"><span class="toc-number">1.2.</span> <span class="toc-text">如何获得SEGGER RTT的源码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8RTT%E6%89%93%E5%8D%B0%EF%BC%8C%E5%B9%B6%E4%B8%94%E5%9C%A8Cortex-Debug%E4%B8%8A%E6%9F%A5%E7%9C%8B"><span class="toc-number">1.3.</span> <span class="toc-text">使用RTT打印，并且在Cortex Debug上查看</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E7%83%A7%E5%BD%95%E4%BB%85%E9%99%84%E5%8A%A0%E8%B0%83%E8%AF%95%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">不烧录仅附加调试的方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ozone"><span class="toc-number">2.</span> <span class="toc-text">Ozone</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Daily/" title="Daily">Daily<sup>10</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Embedded/" title="Embedded">Embedded<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Java/" title="Java">Java<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/FreeRTOS/" title="FreeRTOS">FreeRTOS<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/C/" title="C">C<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/OCaml/" title="OCaml">OCaml<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> This is Canrad&#39;s home page. <br/>
+			</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+				<div class="cc-license">
+          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
+            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
+          </a>
+        </div>
+    
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2026 
+		
+		<a href="/about" target="_blank" title="Canrad">Canrad</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
