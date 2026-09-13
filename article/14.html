@@ -1,529 +1,84 @@
-
- <!DOCTYPE HTML>
-<html lang="en">
-<link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  
-    <title>使用Obsidian作为笔记管理工具 | Canrad&#39;s Blog</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    
-    <meta name="author" content="Canrad">
-    
-
-    
-    <meta name="description" content="之前，我都是使用Joplin来管理我的笔记，然后辅之以Typora来编辑。但是，Joplin有一个很大的问题就是不方便自己管理图片。然后，昨天开始，我就尝试把笔记迁移到Obsidian上。Obsidian给我的一个感觉是使用体验相当不错。   我是借助了一个开源的工具来完成转移笔记的工作的。其Github的地址是：https:&#x2F;&#x2F;github.com&#x2F;luxi78&#x2F;joplin2obsidia">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>使用Obsidian作为笔记管理工具 | Canrad&#39;s Blog</title>
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/pygments.css">
+<meta name="author" content="Canrad">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Obsidian作为笔记管理工具">
 <meta property="og:url" content="https://luiox.github.io/article/14.html">
 <meta property="og:site_name" content="Canrad&#39;s Blog">
-<meta property="og:description" content="之前，我都是使用Joplin来管理我的笔记，然后辅之以Typora来编辑。但是，Joplin有一个很大的问题就是不方便自己管理图片。然后，昨天开始，我就尝试把笔记迁移到Obsidian上。Obsidian给我的一个感觉是使用体验相当不错。   我是借助了一个开源的工具来完成转移笔记的工作的。其Github的地址是：https:&#x2F;&#x2F;github.com&#x2F;luxi78&#x2F;joplin2obsidia">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-11-26T08:11:40.000Z">
-<meta property="article:modified_time" content="2025-07-07T09:32:41.837Z">
-<meta property="article:author" content="Canrad">
+<meta property="article:published_time" content="2023-11-26T16:11:40.000Z">
 <meta property="article:tag" content="Daily">
-<meta name="twitter:card" content="summary">
-
-    
-    <link rel="alternative" href="/atom.xml" title="Canrad&#39;s Blog" type="application/atom+xml">
-    
-    
-    <link rel="icon" href="/img/favicon.ico">
-    
-    
-    <link rel="apple-touch-icon" href="/img/jacman.jpg">
-    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
-    
-    
-<link rel="stylesheet" href="/css/style.css">
-
-<meta name="generator" content="Hexo 7.2.0"></head>
-
- <!-- 代码块复制功能 -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.js"></script>
-<script type="text/javascript" src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript" src="/js/clipboard_use.js"></script>
-  <body>
-    <header>
-      
-<div>
-		
-			<div id="textlogo">
-				<h1 class="site-name"><a href="/" title="Canrad&#39;s Blog">Canrad&#39;s Blog</a></h1>
-				<h2 class="blog-motto"></h2>
-			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
-			</a></div>
-			<nav class="animated">
-				<ul>
-					<ul>
-					 
-						<li><a href="/archives">Archives</a></li>
-					
-					<li>
- 					
-					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
-						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
-						<input type="hidden" name="q" value="site:luiox.github.io">
-					</form>
-					
-					</li>
-				</ul>
-			</nav>			
-</div>
-    </header>
-    <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
-  <h1 itemprop="name">
-    
-      <a href="/article/14.html" title="使用Obsidian作为笔记管理工具" itemprop="url">使用Obsidian作为笔记管理工具</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/" title="Canrad" itemprop="author">Canrad</a>
-		
-  <p class="article-time">
-    <time datetime="2023-11-26T08:11:40.000Z" itemprop="datePublished"> Published 2023-11-26</time>
-    
-  </p>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-row">
+    <a class="site-title" href="/">Canrad&#39;s Blog</a>
+    <nav class="site-nav">
+      <a href="/">首页</a>
+      <a href="/archives/">归档</a>
+      <a href="/tags/">标签</a>
+    </nav>
+  </div>
 </header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			
-		
-		</div>
-		
-		<p>  之前，我都是使用<code>Joplin</code>来管理我的笔记，然后辅之以<code>Typora</code>来编辑。但是，<code>Joplin</code>有一个很大的问题就是不方便自己管理图片。然后，昨天开始，我就尝试把笔记迁移到<code>Obsidian</code>上。<code>Obsidian</code>给我的一个感觉是使用体验相当不错。</p>
-<p>  我是借助了一个开源的工具来完成转移笔记的工作的。其Github的地址是：<a target="_blank" rel="noopener" href="https://github.com/luxi78/joplin2obsidian">https://github.com/luxi78/joplin2obsidian</a>。</p>
-<p>  转移的方法</p>
+<main class="container">
+<div class="site-row">
+  <div id="main" class="main-col">
+    <article class="post-expand">
+      <header class="post-header">
+        <h1 class="post-title">使用Obsidian作为笔记管理工具</h1>
+        <div class="post-meta">
+<time>2023-11-26</time>        </div>
+      </header>
+      <div class="post-content">
+        <p>之前，我都是使用<code>Joplin</code>来管理我的笔记，然后辅之以<code>Typora</code>来编辑。但是，<code>Joplin</code>有一个很大的问题就是不方便自己管理图片。然后，昨天开始，我就尝试把笔记迁移到<code>Obsidian</code>上。<code>Obsidian</code>给我的一个感觉是使用体验相当不错。</p>
+<p>我是借助了一个开源的工具来完成转移笔记的工作的。其Github的地址是：<a href="https://github.com/luxi78/joplin2obsidian" target="_blank" rel="noopener">https://github.com/luxi78/joplin2obsidian</a>。</p>
+<p>转移的方法</p>
 <ul>
 <li>利用Joplin的RAW模式导出所有笔记</li>
 <li>下载版本对应的release版本，并解压</li>
-<li>使用<code>-s</code>指定笔记的源地址，使用<code>-d</code>指定笔记的目标目录（Obsidian笔记的目录）<br>比如我这里源目录是<code>notes</code>，目标地址是<code>notes_obs</code>，那么就在shell或者是控制台里面输入<code>joplin2obsidian -s notes -d notes_obs</code>。确保目录的有效性，目标目录一定要自己创建好。否则会失败。</li>
+<li>使用<code>-s</code>指定笔记的源地址，使用<code>-d</code>指定笔记的目标目录（Obsidian笔记的目录）
+比如我这里源目录是<code>notes</code>，目标地址是<code>notes_obs</code>，那么就在shell或者是控制台里面输入<code>joplin2obsidian -s notes -d notes_obs</code>。确保目录的有效性，目标目录一定要自己创建好。否则会失败。</li>
 </ul>
-<hr>
-<p>  我现在装了<code>Excalidraw</code>，这个插件，给我的感觉就是可以代替<code>XMind</code>、<code>Draw.io</code>这样的绘图工具了。而且嵌入在笔记软件里面，很方便。<code>Obsidian</code>的一个很好用的地方就是模板，我之前每次写博客的时候，都需要从已经写好的文章中把那个文档属性的部分复制过来，因为我不太熟悉这个语法。仅仅只是<code>Hexo</code>的这个博客需要，然后我又不想每次都使用<code>hexo new</code>来创建一个文章的文件。基本上都是，在我的笔记中，创建一个文件，然后把之前的复制过来，把内容删掉，改一下时间。现在有了模板，只需要应用一下模板，减少了我去找之前文章的麻烦。真不错~😃</p>
-<p>  其次，就是，<code>Obsidian</code>的链接和关系图谱功能很吸引我，它可以把两个笔记之间创建连接，引用任何一篇自己笔记，或者是其中的一小部分、一个段落都可以。这比纯<code>Typora</code>强太多了。</p>
-<p>  尽管<code>Obsidian</code>有很多的好处，但是<code>Joplin</code>也并不是完全输给它，<code>Joplin</code>在同步方面就比<code>Obsidian</code>简单，而且是开源免费的。并且有好用的<code>[TOC]</code>，我非常喜欢<code>Joplin</code>和<code>Typora</code>的<code>[TOC]</code>功能。因此，我几乎每一个笔记都加了，但是在<code>Obsidian</code>上不起作用，我不得不花一些时间去消灭这些“<code>[TOC]</code>”。</p>
-<p>  如果是简单易用的话，那还是<code>Joplin</code>更加好一些，而<code>Obsidian</code>在笔记管理上更加强大一些。</p>
-  
-	</div>
-		<footer class="article-footer clearfix">
-<div class="article-catetags">
+<hr />
+<p>我现在装了<code>Excalidraw</code>，这个插件，给我的感觉就是可以代替<code>XMind</code>、<code>Draw.io</code>这样的绘图工具了。而且嵌入在笔记软件里面，很方便。<code>Obsidian</code>的一个很好用的地方就是模板，我之前每次写博客的时候，都需要从已经写好的文章中把那个文档属性的部分复制过来，因为我不太熟悉这个语法。仅仅只是<code>Hexo</code>的这个博客需要，然后我又不想每次都使用<code>hexo new</code>来创建一个文章的文件。基本上都是，在我的笔记中，创建一个文件，然后把之前的复制过来，把内容删掉，改一下时间。现在有了模板，只需要应用一下模板，减少了我去找之前文章的麻烦。真不错~😃</p>
+<p>其次，就是，<code>Obsidian</code>的链接和关系图谱功能很吸引我，它可以把两个笔记之间创建连接，引用任何一篇自己笔记，或者是其中的一小部分、一个段落都可以。这比纯<code>Typora</code>强太多了。</p>
+<p>尽管<code>Obsidian</code>有很多的好处，但是<code>Joplin</code>也并不是完全输给它，<code>Joplin</code>在同步方面就比<code>Obsidian</code>简单，而且是开源免费的。并且有好用的<code>[TOC]</code>，我非常喜欢<code>Joplin</code>和<code>Typora</code>的<code>[TOC]</code>功能。因此，我几乎每一个笔记都加了，但是在<code>Obsidian</code>上不起作用，我不得不花一些时间去消灭这些“<code>[TOC]</code>”。</p>
+<p>如果是简单易用的话，那还是<code>Joplin</code>更加好一些，而<code>Obsidian</code>在笔记管理上更加强大一些。</p>
 
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Daily/">Daily</a>
+      </div>
+      <footer class="post-footer">
+<a class="tag-pill" href="/tags/Daily/">Daily</a>      </footer>
+    </article>
+    <nav class="post-neighbors">
+<a class="neighbor" href="/article/3.html"><span class="neighbor-label">较新</span><span>二零二三年十二月二十四日</span></a><a class="neighbor neighbor-right" href="/article/13.html"><span class="neighbor-label">较早</span><span>二零二三年十一月二十日</span></a>    </nav>
   </div>
-
-</div>
-
-
-
-	<div class="article-share" id="share">
-	
-	  <div data-url="https://luiox.github.io/article/14.html" data-title="使用Obsidian作为笔记管理工具 | Canrad&#39;s Blog" data-tsina="" class="share clearfix">
-	  </div>
-	
-	</div>
-
-
-</footer>
-
-   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/article/3.html" title="二零二三年十二月二十四日">
-  <strong>上一篇：</strong><br/>
-  <span>
-  二零二三年十二月二十四日</span>
-</a>
-</div>
-
-
-<div class="next">
-<a href="/article/13.html"  title="二零二三年十一月二十日">
- <strong>下一篇：</strong><br/> 
- <span>二零二三年十一月二十日
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        // 为每个代码块添加复制按钮
-        document.querySelectorAll('.article-content .highlight').forEach(function(codeBlock) {
-            var button = document.createElement('button');
-            button.className = 'copy-button';
-            button.textContent = '复制';
-            button.title = '复制代码';
-            button.addEventListener('click', function() {
-                // 使用Clipboard.js复制代码块的内容到剪贴板
-                var clipboard = new ClipboardJS(button, {
-                    text: function(trigger) {
-                        // 找到按钮所在的代码块
-                        var codeBlock = trigger.closest('.highlight');
-                        // 获取所有的<pre>元素
-                        var preElements = codeBlock.querySelectorAll('pre');
-                        // 返回第二个<pre>元素的innerText
-                        return preElements[1].innerText;
-                    }
-                });
-                
-                clipboard.on('success', function(e) {
-                    //alert('代码复制成功');
-                    e.clearSelection();
-                    // 显示“复制成功”
-                    button.textContent = '复制成功';
-                    // 5秒后恢复为“复制”
-                    setTimeout(function() {
-                        button.textContent = '复制';
-                    }, 5000);
-                });
-                clipboard.on('error', function(e) {
-                    //alert('代码复制失败');
-                    e.clearSelection();
-                    // 显示“复制成功”
-                    button.textContent = '复制失败';
-                    // 5秒后恢复为“复制”
-                    setTimeout(function() {
-                        button.textContent = '复制';
-                    }, 5000);
-                    });
-            });
-            codeBlock.insertBefore(button, codeBlock.firstChild);
-            });
-        });
-    </script>
-</div>
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- 
- 
+<aside id="asidepart">
+  <div class="tagslist clearfix">
+    <p class="asidetitle">标签</p>
+    <ul class="clearfix">
+      <li><a href="/tags/Daily/">Daily<sup>11</sup></a></li>
+      <li><a href="/tags/Embedded/">Embedded<sup>4</sup></a></li>
+      <li><a href="/tags/FreeRTOS/">FreeRTOS<sup>3</sup></a></li>
+      <li><a href="/tags/Java/">Java<sup>3</sup></a></li>
+      <li><a href="/tags/C/">C<sup>2</sup></a></li>
+      <li><a href="/tags/OCaml/">OCaml<sup>1</sup></a></li>
+    </ul>
   </div>
-
-<div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
-<aside class="clearfix">
-
-  
-
-  
-<div class="tagslist">
-	<p class="asidetitle">Tags</p>
-		<ul class="clearfix">
-		
-			
-				<li><a href="/tags/Daily/" title="Daily">Daily<sup>11</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Embedded/" title="Embedded">Embedded<sup>4</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Java/" title="Java">Java<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/FreeRTOS/" title="FreeRTOS">FreeRTOS<sup>3</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/C/" title="C">C<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/OCaml/" title="OCaml">OCaml<sup>1</sup></a></li>
-			
-		
-		</ul>
-</div>
-
-
-</aside>
-</div>
-    </div>
-    <footer><div id="footer" >
-	
-	<div class="line">
-		<span></span>
-		<div class="author"></div>
-	</div>
-	
-	
-	<section class="info">
-		<p> This is Canrad&#39;s home page. <br/>
-			</p>
-	</section>
-	 
-	<div class="social-font" class="clearfix">
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	</div>
-			
-		
-				<div class="cc-license">
-          <a href="http://creativecommons.org/licenses/by-nc-sa/4.0" class="cc-opacity" target="_blank">
-            <img src="/img/cc-by-nc-sa.svg" alt="Creative Commons" />
-          </a>
-        </div>
-    
-
-		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2026 
-		
-			<a href="/" title="Canrad">Canrad</a>
-		
-		
-		</p>
-</div>
+</aside></div>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <p>© Canrad · 由 mdtool sitegen 生成</p>
+  </div>
 </footer>
-    <script src="/js/jquery-2.0.3.min.js"></script>
-<script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.navbar').click(function(){
-    $('header nav').toggleClass('shownav');
-  });
-  var myWidth = 0;
-  function getSize(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-  };
-  var m = $('#main'),
-      a = $('#asidepart'),
-      c = $('.closeaside'),
-      o = $('.openaside');
-  c.click(function(){
-    a.addClass('fadeOut').css('display', 'none');
-    o.css('display', 'block').addClass('fadeIn');
-    m.addClass('moveMain');
-  });
-  o.click(function(){
-    o.css('display', 'none').removeClass('beforeFadeIn');
-    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
-    m.removeClass('moveMain');
-  });
-  $(window).scroll(function(){
-    o.css("top",Math.max(80,260-$(this).scrollTop()));
-  });
-  
-  $(window).resize(function(){
-    getSize(); 
-    if (myWidth >= 1024) {
-      $('header nav').removeClass('shownav');
-    }else{
-      m.removeClass('moveMain');
-      a.css('display', 'block').removeClass('fadeOut');
-      o.css('display', 'none');
-      
-      $('#toc.toc-aside').css('display', 'none');
-        
-    }
-  });
-});
-</script>
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  c.click(function(){
-    ta.css('display', 'block').addClass('fadeIn');
-  });
-  o.click(function(){
-    ta.css('display', 'none');
-  });
-  $(window).scroll(function(){
-    ta.css("top",Math.max(140,320-$(this).scrollTop()));
-  });
-});
-</script>
-
-
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<div class="hoverqrcode clearfix"></div>',
-  '<a class="overlay" id="qrcode"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-
-  $('.hoverqrcode').hide();
-
-  var myWidth = 0;
-  function updatehoverqrcode(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-    var qrsize = myWidth > 1024 ? 200:100;
-    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
-    var p = $('.article-share-qrcode').position();
-    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
-                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
-                          .qrcode(options);
-  };
-  $(window).resize(function(){
-    $('.hoverqrcode').hide();
-  });
-  $('.article-share-qrcode').click(function(){
-    updatehoverqrcode();
-    $('.hoverqrcode').toggle();
-  });
-  $('.article-share-qrcode').hover(function(){}, function(){
-      $('.hoverqrcode').hide();
-  });
-});   
-</script>
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){ 
-  $('.article-content').each(function(i){
-    $(this).find('img').each(function(){
-      if ($(this).parent().hasClass('fancybox')) return;
-      var alt = this.alt;
-      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
-      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
-    });
-    $(this).find('.fancybox').each(function(){
-      $(this).attr('rel', 'article' + i);
-    });
-  });
-  if($.fancybox){
-    $('.fancybox').fancybox();
-  }
-}); 
-</script>
-
-
-
-<!-- Analytics Begin -->
-
-
-
-
-
-<!-- Analytics End -->
-
-<!-- Totop Begin -->
-
-	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
-	</div>
-	<script src="/js/totop.js"></script>
-
-<!-- Totop End -->
-
-<!-- MathJax Begin -->
-<!-- mathjax config similar to math.stackexchange -->
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
-
-<!-- MathJax End -->
-
-<!-- Tiny_search Begin -->
-
-<!-- Tiny_search End -->
-
-  </body>
+<script src="/js/site.js" defer></script>
+</body>
 </html>
